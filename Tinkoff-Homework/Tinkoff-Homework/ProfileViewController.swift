@@ -8,11 +8,11 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var changeProfileImageButton: UIButton!
-    
+    @IBOutlet weak var editButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,14 +20,18 @@ class ProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        makeViewsCircular()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupUI()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    func makeViewsCircular() {
+    func setupUI() {
         let radius = changeProfileImageButton.frame.size.width/2
         
         changeProfileImageButton.layer.cornerRadius = radius
@@ -35,13 +39,64 @@ class ProfileViewController: UIViewController {
         
         profileImage.layer.cornerRadius = radius
         profileImage.clipsToBounds = true
+        
+        let offsetConstant = CGFloat(20)
+        changeProfileImageButton.imageEdgeInsets = UIEdgeInsetsMake(offsetConstant, offsetConstant, offsetConstant, offsetConstant)
+        
+        editButton.layer.borderColor = UIColor.black.cgColor
+        editButton.layer.borderWidth = 2
+        editButton.layer.cornerRadius = 12
+        editButton.clipsToBounds = true
     }
     
     @IBAction func changeProfileImage(_ sender: Any) {
         print("Выбери изображение профиля")
         
+        let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Отмена", style: .cancel) { action -> Void in
+        }
+        
+        
+        let takePictureAction: UIAlertAction = UIAlertAction(title: "Сделать фото", style: .default) { action -> Void in
+            self.openCamera()
+        }
+        
+        let choosePictureAction: UIAlertAction = UIAlertAction(title: "Выбрать из галереи", style: .default) { action -> Void in
+            self.openPhotoLibrary()
+        }
+        
+        actionSheetController.addAction(choosePictureAction)
+        actionSheetController.addAction(cancelAction)
+        actionSheetController.addAction(takePictureAction)
+
+        self.present(actionSheetController, animated: true, completion: nil)
     }
     
+    func openCamera() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .camera;
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    func openPhotoLibrary() {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .photoLibrary;
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            profileImage.image = image
+        }
+        dismiss(animated:true, completion: nil)
+    }
 
 }
 
