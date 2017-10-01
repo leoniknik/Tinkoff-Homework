@@ -14,8 +14,23 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var changeProfileImageButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        if let button = editButton {
+            print(button.frame)
+        }
+        else {
+            print("Произошла ошибка, так как button еще не прогружен, так как не был еще вызван loadView")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(editButton.frame)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -24,6 +39,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //frame отличается, так как к кнопке были применены констреинты, и кнопка перерисовалась для другого экрана
+        print(editButton.frame)
         setupUI()
     }
 
