@@ -37,11 +37,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         super.viewWillAppear(animated)
     }
     
+    override func viewDidLayoutSubviews() {
+        setupUI()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //frame отличается, так как к кнопке были применены констреинты, и кнопка перерисовалась для другого экрана
         print(editButton.frame)
-        setupUI()
     }
 
     override func didReceiveMemoryWarning() {
@@ -114,6 +117,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
         dismiss(animated:true, completion: nil)
     }
-
+    
+    
+    @IBAction func goBack(_ sender: UIBarButtonItem) {
+        dismiss(animated: true, completion: nil)
+    }
+    
 }
 
