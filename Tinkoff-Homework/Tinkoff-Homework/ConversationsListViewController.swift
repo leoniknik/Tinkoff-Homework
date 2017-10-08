@@ -41,7 +41,7 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ConversationCell", for: indexPath) as! ConversationCell
-        
+        //потом переделаю, чтобы данные брались, например, из массива, но для макета чата сойдет
         if indexPath.section == 0 {
             switch indexPath.row {
             case 0:
@@ -109,6 +109,7 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
             }
         }
         else {
+            //потом переделаю, чтобы данные брались из массива, но для макета чата сойдет
             switch indexPath.row {
             case 0:
                 cell.name = "Максим"

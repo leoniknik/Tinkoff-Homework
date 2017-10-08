@@ -17,10 +17,12 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.separatorStyle = .none
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageOutCell", for: indexPath) as! MessageCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: "MessageOutCell", for: indexPath) as! MessageCell
+        //потом переделаю, чтобы данные брались из массива, но для макета чата сойдет
         switch indexPath.row {
         case 0:
             cell.message = "Б"
@@ -29,11 +31,14 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         case 2:
             cell.message = "Блок транзакций это специальная структура для записи группы транзакций в системе Биткойн и аналогичных ей. Транзакция считается завершённой и достоверной, когда проверены её формат и подписи, и когда сама транзакция объединена в группу с несколькими другими и записана в специальную структуру — блок)"
         case 3:
+            cell = tableView.dequeueReusableCell(withIdentifier: "MessageInCell", for: indexPath) as! MessageCell
             cell.message = "a"
         case 4:
-            cell.message = "a"
+            cell = tableView.dequeueReusableCell(withIdentifier: "MessageInCell", for: indexPath) as! MessageCell
+            cell.message = "Блокчейн — выстроенная по опре"
         case 5:
-            cell.message = "a"
+            cell = tableView.dequeueReusableCell(withIdentifier: "MessageInCell", for: indexPath) as! MessageCell
+            cell.message = "Блок транзакций это специальная структура для записи группы транзакций в системе Биткойн и аналогичных ей. Транзакция считается завершённой и достоверной, когда проверены её формат и подписи, и когда сама транзакция объединена в группу с несколькими другими и записана в специальную структуру — блок)"
         default:
             return UITableViewCell()
         }
@@ -45,9 +50,9 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! MessageCell
-        print(cell.contentView.frame.width)
-        print(cell.messageLabel.frame.width)
+//        let cell = tableView.cellForRow(at: indexPath) as! MessageCell
+//        print(cell.contentView.frame.width)
+//        print(cell.messageLabel.frame.width)
     }
 
 }
