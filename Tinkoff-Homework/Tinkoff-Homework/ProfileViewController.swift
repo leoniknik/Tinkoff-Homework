@@ -220,14 +220,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         if(profile.needSave){
             GCDbutton.isEnabled = true
             OperationButton.isEnabled = true
-            GCDbutton.backgroundColor = .green
-            OperationButton.backgroundColor = .green
         }
         else{
             GCDbutton.isEnabled = false
             OperationButton.isEnabled = false
-            GCDbutton.backgroundColor = .red
-            OperationButton.backgroundColor = .red
         }
     }
     

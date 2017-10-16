@@ -99,7 +99,6 @@ class Profile : NSObject, NSCoding, ProfileProtocol{
         name = newName
         info = newInfo
         
-        
         if let fileURL = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("profile.prf"){
             do {
                 let data = NSKeyedArchiver.archivedData(withRootObject: self)
