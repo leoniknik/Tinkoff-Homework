@@ -80,6 +80,8 @@ class ConversationCell: UITableViewCell, ConversationCellConfiguration {
             }
         }
     }
+        
+    
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
