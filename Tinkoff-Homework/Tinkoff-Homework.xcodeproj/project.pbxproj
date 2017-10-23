@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CA37B9321F9D62E5007CE2EC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA37B9311F9D62E5007CE2EC /* Message.swift */; };
 		CA37B9341F9D638F007CE2EC /* ConversationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA37B9331F9D638F007CE2EC /* ConversationItem.swift */; };
 		CA37B9361F9D63F9007CE2EC /* MessageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA37B9351F9D63F9007CE2EC /* MessageItem.swift */; };
 		CA6CF3381F8A5CF3001DDA87 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6CF3371F8A5CF3001DDA87 /* ConversationViewController.swift */; };
@@ -34,7 +33,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CA37B9311F9D62E5007CE2EC /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		CA37B9331F9D638F007CE2EC /* ConversationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationItem.swift; sourceTree = "<group>"; };
 		CA37B9351F9D63F9007CE2EC /* MessageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageItem.swift; sourceTree = "<group>"; };
 		CA6CF3371F8A5CF3001DDA87 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
@@ -81,7 +79,6 @@
 				CAAE9B7E1F9CFD5700FCFC39 /* CommunicatorDelegate.swift */,
 				CAAE9B801F9CFD9E00FCFC39 /* MultipeerConnectivity.swift */,
 				CAAE9B821F9D023500FCFC39 /* CommunicationManager.swift */,
-				CA37B9311F9D62E5007CE2EC /* Message.swift */,
 				CA37B9331F9D638F007CE2EC /* ConversationItem.swift */,
 				CA37B9351F9D63F9007CE2EC /* MessageItem.swift */,
 			);
@@ -205,7 +202,6 @@
 				CAF22E5B1F94D6C40048E83A /* AlertManager.swift in Sources */,
 				CAF0EA831F89877200EF3461 /* ConversationCell.swift in Sources */,
 				CAAE9B7D1F9CFD3400FCFC39 /* Communicator.swift in Sources */,
-				CA37B9321F9D62E5007CE2EC /* Message.swift in Sources */,
 				CAF22E5F1F94D73F0048E83A /* TaskManager.swift in Sources */,
 				CAF22E631F94D7D80048E83A /* Operations.swift in Sources */,
 				CA8F62411F77189F004119A7 /* ProfileViewController.swift in Sources */,
