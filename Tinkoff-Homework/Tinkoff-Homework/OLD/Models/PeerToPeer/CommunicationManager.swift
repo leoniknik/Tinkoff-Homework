@@ -66,7 +66,6 @@ class CommunicationManager: CommunicatorDelegate {
     
         communicator.sendMessage(string: message.text, to: conversation.userId) { (success, error) in
             guard error == nil else {
-                print(error!.localizedDescription)
                 return
             }
             

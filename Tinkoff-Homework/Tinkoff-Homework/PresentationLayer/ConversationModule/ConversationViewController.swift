@@ -82,21 +82,35 @@ class ConversationViewController: UIViewController,UITableViewDelegate,UITableVi
         let message = messages[indexPath.row]
         
         if(message.isIncoming){
-            let cell = table.dequeueReusableCell(withIdentifier: "IncomeMessageCell", for: indexPath) as! MessageCell
-            cell.message = message.text
-            return cell
+            let cell = table.dequeueReusableCell(withIdentifier: "IncomeMessageCell", for: indexPath) as? MessageCell
+            
+            if let cell = cell {
+                cell.message = message.text
+                return cell
+            }
+            else {
+                return UITableViewCell()
+            }
             
         }else{
-            let cell = table.dequeueReusableCell(withIdentifier: "OutcomeMessageCell", for: indexPath) as! MessageCell
-            cell.message = message.text
-            return cell
+            let cell = table.dequeueReusableCell(withIdentifier: "OutcomeMessageCell", for: indexPath) as? MessageCell
+            
+            if let cell = cell {
+                cell.message = message.text
+                return cell
+            }
+            else {
+                return UITableViewCell()
+            }
         }
         
     }
     
     @IBAction func send(_ sender: Any) {
-        model.sendMessage(string: messageText.text!, to: model.userID)
-        //multipeerCommunicator.sendMessage(string: messageText.text!, to: userID!, completionHandler: nil)
+        if let text = messageText.text {
+            model.sendMessage(string: text, to: model.userID)
+        }
+
     }
     
     

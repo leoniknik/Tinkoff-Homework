@@ -11,23 +11,6 @@ import UIKit
 
 class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate,UITextViewDelegate,TaskManagerDelegate,ProfileViewControllerModelDelegate {
     
-    func startAnimate() {
-        self.activityStartAnimate()
-    }
-    
-    func stopAnimate() {
-        self.activityStopAnimate()
-    }
-    
-    func update(){
-        loadDataFromProfile()
-    }
-    
-    func receiveProfile(profile: Profile) {
-        model.profile=profile
-        self.loadDataFromProfile()
-    }
-    
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -47,7 +30,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBOutlet weak var activity: UIActivityIndicatorView!
     
-    var picker:UIImagePickerController?=UIImagePickerController()
+    var picker:UIImagePickerController=UIImagePickerController()
     
    
     
@@ -65,8 +48,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //        set delegates
-        picker!.delegate = self
+        picker.delegate = self
         nameTextField.delegate = self
         infoTextView.delegate = self
         
@@ -168,19 +150,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func openGallary()
     {
-        picker!.allowsEditing = false
-        picker!.sourceType = UIImagePickerControllerSourceType.photoLibrary
-        present(picker!, animated: true, completion: nil)
+        picker.allowsEditing = false
+        picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        present(picker, animated: true, completion: nil)
     }
     
     
     func openCamera()
     {
         if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
-            picker!.allowsEditing = false
-            picker!.sourceType = UIImagePickerControllerSourceType.camera
-            picker!.cameraCaptureMode = .photo
-            present(picker!, animated: true, completion: nil)
+            picker.allowsEditing = false
+            picker.sourceType = UIImagePickerControllerSourceType.camera
+            picker.cameraCaptureMode = .photo
+            present(picker, animated: true, completion: nil)
         }else{
             let alert = UIAlertController(title: "Нет камеры", message: "На этом устройстве нет камеры", preferredStyle: .alert)
             let ok = UIAlertAction(title: "OK", style:.default, handler: nil)
@@ -190,7 +172,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let image = (info[UIImagePickerControllerOriginalImage] as? UIImage) ?? UIImage()
         model.profile.newAvatar = image
         photoImageView.image = image
         setSaveButtonsAvalibleState()
@@ -228,12 +210,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        model.profile.newInfo = infoTextView.text!
+        if let text = infoTextView.text {
+            model.profile.newInfo = text
+        }
         setSaveButtonsAvalibleState()
     }
     
     @IBAction func nameChanged(_ sender: Any) {
-        model.profile.newName = nameTextField.text!
+        if let text = nameTextField.text {
+            model.profile.newName = text
+        }
         setSaveButtonsAvalibleState()
     }
     
@@ -303,6 +289,24 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         optionMenu.addAction(cancelAction)
         optionMenu.addAction(againAction)
         self.present(optionMenu, animated: true, completion: nil)
+    }
+    
+    
+    func startAnimate() {
+        self.activityStartAnimate()
+    }
+    
+    func stopAnimate() {
+        self.activityStopAnimate()
+    }
+    
+    func update(){
+        loadDataFromProfile()
+    }
+    
+    func receiveProfile(profile: Profile) {
+        model.profile=profile
+        self.loadDataFromProfile()
     }
     
 }

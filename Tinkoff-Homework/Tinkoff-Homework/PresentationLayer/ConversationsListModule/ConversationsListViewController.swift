@@ -133,21 +133,6 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         tableView.deselectRow(at: indexPath, animated: false)
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//
-////        if segue.identifier == "toChat" {
-////            let destination = segue.destination
-////            if let index = tableView.indexPathForSelectedRow {
-////                let conversation = model.communicationManager.converationList[index.row]
-////                conversation.hasUnreadMessages = false
-////                destination.navigationItem.title = conversation.name
-////                (destination as? ConversationViewController)?.userID = conversation.userId
-////            }
-////        }
-//        
-//
-//    }
-    
     func updateConversationsList() {
         model.getConversations()
         tableView.reloadData()
@@ -179,9 +164,8 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
             }
         }
         
-        
-        onWith.sort{$0.messages.last!.date! < $1.messages.last!.date!}
-        offWith.sort{$0.messages.last!.date! < $1.messages.last!.date!}
+        onWith.sort{$0.messages.last?.date ?? Date() < $1.messages.last?.date ?? Date()}
+        offWith.sort{$0.messages.last?.date ?? Date() < $1.messages.last?.date ?? Date()}
         
         onWithout.sort{$0.name<$1.name}
         offWithout.sort{$0.name<$1.name}
