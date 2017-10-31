@@ -67,16 +67,16 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
             conversation = conversationOfflineList[indexPath.row]
         }
         
-        cell.name = conversation.name
-        cell.date = conversation.lastMessageDate
-        cell.online = conversation.online
-        cell.hasUnreadMessages = conversation.hasUnreadMessages
-        
         if let message = conversation.messages.last {
             cell.message = message.text
         } else {
             cell.message = "No messages yet"
         }
+        
+        cell.name = conversation.name
+        cell.date = conversation.lastMessageDate
+        cell.online = conversation.online
+        cell.hasUnreadMessages = conversation.hasUnreadMessages
         
         return cell as! UITableViewCell
         
@@ -110,8 +110,9 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
             let destination = segue.destination
             if let index = tableView.indexPathForSelectedRow {
                 let conversation = conversationManager.converationList[index.row]
-                conversationManager.selectCurrentConversation(withId: conversation.userId)
+                conversation.hasUnreadMessages = false
                 destination.navigationItem.title = conversation.name
+                (destination as? ConversationViewController)?.userID = conversation.userId
             }
         }
 

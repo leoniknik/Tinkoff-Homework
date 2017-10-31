@@ -76,7 +76,7 @@ class ConversationCell: UITableViewCell, ConversationCellConfiguration {
     var hasUnreadMessages: Bool = false {
         didSet {
             if hasUnreadMessages {
-                messageLabel.font = UIFont.boldSystemFont(ofSize: 13)
+                messageLabel.font = UIFont.boldSystemFont(ofSize: 14)
             }
         }
     }

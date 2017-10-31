@@ -11,6 +11,7 @@ import UIKit
 class ConversationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ConversationsManagerDelegate{
 
     let conversationManager = ConversationsManager.shared
+    var userID: String = ""
     var messages : [Message] = []
     
     @IBOutlet weak var tableView: UITableView!
@@ -34,26 +35,19 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
 //        self.messages = communicationManager!.getDialogMessages(userName: userName!)
 //        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
-        if let conversation = conversationManager.currentConversation {
+        if let conversation = conversationManager.getConversationBy(userID: userID) {
             navigationItem.title = conversation.name
             messages = conversation.messages
+            checkUserOnline()
         }
         
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
-        conversationManager.forgetCurrentConversation()
+        conversationManager.getConversationBy(userID: userID)?.hasUnreadMessages = false
     }
     
-//    @objc func refreshDialog(_ notification: NSNotification){
-//        let dialog = communicationManager!.getChatDialog(userName: userName!)
-//        self.messages = dialog.messages
-//        DispatchQueue.main.async {
-//            self.sendMessageButton.isEnabled = dialog.online
-//            self.tableView.reloadData()
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -83,7 +77,7 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     
     func updateCurrentConversation() {
         checkUserOnline()
-        if let conversation = conversationManager.currentConversation {
+        if let conversation = conversationManager.getConversationBy(userID: userID) {
             messages = conversation.messages
         }
         tableView.reloadData()
@@ -91,10 +85,11 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func checkUserOnline() {
-        if (conversationManager.currentConversation == nil){
+        if let conversation = conversationManager.getConversationBy(userID: userID) {
+            sendMessageButton.isEnabled = conversation.online
+        }
+        else {
             sendMessageButton.isEnabled = false
-        } else {
-            sendMessageButton.isEnabled = true
         }
     }
     
@@ -105,7 +100,7 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
             if str.count > 0 {
                 let message = Message.init(withText: messageTextField.text!, user: UUID().uuidString)
                 message?.isIncoming = false
-                conversationManager.send(message!)
+                conversationManager.send(message!, userID: userID)
                 messageTextField.text = ""
             }
         }

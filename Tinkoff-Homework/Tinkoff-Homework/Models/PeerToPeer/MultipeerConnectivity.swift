@@ -13,7 +13,7 @@ class MultipeerCommunicator:NSObject, Communicator {
     
     private var sessions = [ String : MCSession ]()
     
-    private let peerID = MCPeerID(displayName: UUID().uuidString)
+    private let peerID = MCPeerID(displayName: (UIDevice.current.identifierForVendor?.uuidString)!)
     private var browser: MCNearbyServiceBrowser!
     private var advertiser: MCNearbyServiceAdvertiser!
     
@@ -21,7 +21,6 @@ class MultipeerCommunicator:NSObject, Communicator {
     private let discoveryInfo = ["userName" : "komp"]
     private let messageEvent = "TextMessage"
     
-    //Communicator
     weak var delegate: CommunicatorDelegate?
     var online: Bool = true
     
@@ -125,7 +124,19 @@ extension MultipeerCommunicator: MCSessionDelegate {
     }
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        print("peer \(peerID) didChangeState: \(state.rawValue)")
+        switch state{
+        case .connected:
+            delegate?.userDidBecome(userID: peerID.displayName, online: true)
+            break
+            
+        case .connecting:
+            break
+            
+        case .notConnected:
+            delegate?.userDidBecome(userID: peerID.displayName, online: false)
+            break
+        }
+        
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
