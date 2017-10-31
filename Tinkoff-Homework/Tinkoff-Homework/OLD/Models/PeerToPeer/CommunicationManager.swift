@@ -95,8 +95,9 @@ class CommunicationManager: CommunicatorDelegate {
             converationList[ind].online = true
         }
         else {
-            let newConversation = ConversationElement.init(withUser: userID, userName: userName)!
-            converationList.append(newConversation)
+            if let newConversation = ConversationElement.init(withUser: userID, userName: userName) {
+                converationList.append(newConversation)
+            }
         }
         
         converationList = converationList.sorted {
@@ -155,12 +156,13 @@ class CommunicationManager: CommunicatorDelegate {
         }
         
         if let ind = converationList.index(where: {$0.userId == rawFrom }) {
-            let newMessage = Message.init(withText: text, user: rawFrom)!
+            if let newMessage = Message.init(withText: text, user: rawFrom) {
             newMessage.isIncoming = status
             converationList[ind].addMessage(message: newMessage)
 //            if fromUser == currentConversationId {
 //                converationList[ind].hasUnreadMessages = false
 //            }
+            }
         }
         
         DispatchQueue.main.async {

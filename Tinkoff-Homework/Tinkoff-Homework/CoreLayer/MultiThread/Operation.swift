@@ -35,10 +35,11 @@ class OperationTaskManager : TaskManager, ProfileService  {
         delegate?.startAnimate()
         let readOperation = ReadProfileOperation()
         readOperation.completionBlock = {
-            let profile = readOperation.profile!
-            DispatchQueue.main.async() {
-                self.delegate?.receiveProfile(profile: profile)
-                self.delegate?.stopAnimate()
+            if let profile = readOperation.profile {
+                DispatchQueue.main.async() {
+                    self.delegate?.receiveProfile(profile: profile)
+                    self.delegate?.stopAnimate()
+                }
             }
         }
         operationQueue.addOperation(readOperation)

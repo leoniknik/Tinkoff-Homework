@@ -21,34 +21,35 @@ class jsonManager{
         }
     }
     
-    static func jsonToDictionary(data:Data) -> [String: String] {
+    static func jsonToDictionary(data:Data) -> [String: String]? {
             do {
-                return (try JSONSerialization.jsonObject(with: data, options: []) as? [String: String])!
+                return (try JSONSerialization.jsonObject(with: data, options: []) as? [String: String])
             } catch {
                 print(error.localizedDescription)
             }
         return [:]
     }
     
-    static func generateMessageID()->String{
+    static func generateMessageID()->String?{
         let string = "\(arc4random_uniform(UINT32_MAX))+\(Date.timeIntervalSinceReferenceDate)+\(arc4random_uniform(UINT32_MAX))".data(using: .utf8)?.base64EncodedString()
-        return string!
+        return string
     }
     
-    static func makeMessage(string:String)->Data{
+    static func makeMessage(string:String)->Data?{
         
-//        guard let messageId = generateMessageID() else {
-//            return nil
-//        }
+        guard let messageId = generateMessageID() else {
+            return nil
+        }
+
         let message = ["eventType": "TextMessage",
-        "messageId": generateMessageID(),
+        "messageId": messageId,
         "text": string]
         
         return dictTojson(jsonObject: message)
     }
     
     static func readMessage(data:Data)->String{
-        return jsonToDictionary(data: data)["text"]!
+        return jsonToDictionary(data: data)?["text"] ?? ""
     }
     
 }

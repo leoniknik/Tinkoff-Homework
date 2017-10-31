@@ -23,11 +23,11 @@ extension ProfileService{
                 return profile
             }
         }
-        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user")!,needSave: false)
+        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user") ?? UIImage(),needSave: false)
     }
     
     func getEmptyProfileService()->Profile{
-        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user")!,needSave: false)
+        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user") ?? UIImage(),needSave: false)
     }
     
     func saveProfileService(profile:Profile)->String?{
