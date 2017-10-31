@@ -36,7 +36,10 @@ class OperationTaskManager : AlertManager, TaskManager {
         controller.activityIndicator.startAnimating()
         let readOperation = ReadProfileOperation()
         readOperation.completionBlock = {
-            let profile = readOperation.profile!
+            guard let profile = readOperation.profile else {
+                controller.activityIndicator.stopAnimating()
+                return
+            }
             DispatchQueue.main.async() {
                 controller.profile = profile
                 controller.loadDataFromProfile()

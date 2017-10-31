@@ -13,7 +13,7 @@ class MultipeerCommunicator:NSObject, Communicator {
     
     private var sessions = [ String : MCSession ]()
     
-    private let peerID = MCPeerID(displayName: (UIDevice.current.identifierForVendor?.uuidString)!)
+    private let peerID = MCPeerID(displayName: UIDevice.current.identifierForVendor?.uuidString ?? "volodinKirill")
     private var browser: MCNearbyServiceBrowser!
     private var advertiser: MCNearbyServiceAdvertiser!
     
@@ -77,7 +77,10 @@ class MultipeerCommunicator:NSObject, Communicator {
     }
     
     func createMessage(withText text: String) -> Data? {
-        let messageId = generateMessageId()
+        guard let messageId = generateMessageId() else {
+            return nil
+        }
+        
         let messageJson = [
             "eventType" : messageEvent,
             "messageId" : messageId,
@@ -95,9 +98,9 @@ class MultipeerCommunicator:NSObject, Communicator {
     
     // MARK: generate ID
     
-    func generateMessageId() -> String {
+    func generateMessageId() -> String? {
         let string = "\(arc4random_uniform(UINT32_MAX))+\(Date.timeIntervalSinceReferenceDate)+\(arc4random_uniform(UINT32_MAX))".data(using: .utf8)?.base64EncodedString()
-        return string!
+        return string
     }
 }
 

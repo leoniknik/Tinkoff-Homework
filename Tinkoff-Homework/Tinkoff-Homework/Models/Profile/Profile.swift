@@ -50,11 +50,11 @@ class Profile : NSObject, NSCoding, ProfileProtocol{
                 return profile
             }
         }
-        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user")!,needSave: false)
+        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user") ?? UIImage(), needSave: false)
     }
     
-    static func getEmptyProfile()->Profile{
-        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user")!,needSave: false)
+    static func getEmptyProfile() -> Profile{
+        return Profile(name: "",info: "",avatar: UIImage.init(named: "placeholder-user") ?? UIImage() ,needSave: false)
     }
     
     init(name: String, info: String, avatar : UIImage, needSave : Bool) {
@@ -69,9 +69,9 @@ class Profile : NSObject, NSCoding, ProfileProtocol{
     
     required convenience init(coder aDecoder: NSCoder) {
         self.init(
-            name: aDecoder.decodeObject(forKey: "name") as! String,
-            info: aDecoder.decodeObject(forKey: "info") as! String,
-            avatar: Profile.base64ImageStringToUIImage(base64String: aDecoder.decodeObject(forKey: "avatar") as! String),
+            name: (aDecoder.decodeObject(forKey: "name") as? String) ?? "",
+            info: (aDecoder.decodeObject(forKey: "info") as? String) ?? "",
+            avatar: Profile.base64ImageStringToUIImage(base64String: (aDecoder.decodeObject(forKey: "avatar") as? String) ?? ""),
             needSave: false
         )
     }
@@ -82,14 +82,14 @@ class Profile : NSObject, NSCoding, ProfileProtocol{
         aCoder.encode(imageToBase64ImageString(image: avatar), forKey: "avatar")
     }
     
-    static func base64ImageStringToUIImage(base64String:String)->UIImage{
-        let dataDecoded : Data = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters)!
-        return UIImage(data: dataDecoded)!
+    static func base64ImageStringToUIImage(base64String:String) -> UIImage{
+        let dataDecoded : Data? = Data(base64Encoded: base64String, options: .ignoreUnknownCharacters)
+        return UIImage(data: dataDecoded ?? Data()) ?? UIImage()
     }
     
     func imageToBase64ImageString(image:UIImage)->String{
         let jpegCompressionQuality: CGFloat = 1
-        return (UIImageJPEGRepresentation(image, jpegCompressionQuality)?.base64EncodedString())!
+        return (UIImageJPEGRepresentation(image, jpegCompressionQuality)?.base64EncodedString()) ?? ""
     }
     
     func saveProfile()->String?{
