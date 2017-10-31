@@ -199,17 +199,18 @@ extension MultipeerCommunicator: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         print("didReceiveInvitationFromPeer \(peerID)")
         
-        //let session = createSession(forUser: peerID.displayName)
+        let session = createSession(forUser: peerID.displayName)
         
-        if let session = sessions[peerID.displayName] {
+//        if let session = sessions[peerID.displayName] {
+        
             if !session.connectedPeers.contains(peerID) {
                 invitationHandler(true, session)
             } else {
                 invitationHandler(false, nil)
             }
-        } else {
-            invitationHandler(false, nil)
-        }
+//        } else {
+//            invitationHandler(false, nil)
+//        }
         
     }
 }
