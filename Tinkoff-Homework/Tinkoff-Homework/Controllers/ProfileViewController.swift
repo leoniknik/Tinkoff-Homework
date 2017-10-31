@@ -22,8 +22,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var changeProfileImageButton: UIButton!
-//    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var heightConstraintForStackView: NSLayoutConstraint!
     @IBOutlet weak var bottomConstraintForScrollView: NSLayoutConstraint!
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
