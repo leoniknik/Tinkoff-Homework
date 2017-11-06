@@ -9,34 +9,23 @@
 import Foundation
 import UIKit
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate,UITextViewDelegate,TaskManagerDelegate,ProfileViewControllerModelDelegate {
-    
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, IProfileModelDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
-    
     @IBOutlet weak var downConstraint: NSLayoutConstraint!
     @IBOutlet weak var nameTextField: UITextField!
-    
     @IBOutlet weak var infoTextView: UITextView!
-    
-    @IBOutlet weak var gcdButton: UIButton!
-    
-    @IBOutlet weak var operationButton: UIButton!
-    
-    
+    @IBOutlet weak var saveButton: UIButton!
+//    @IBOutlet weak var operationButton: UIButton!
     @IBOutlet weak var photoImageView: UIImageView!
-    
     @IBOutlet weak var makePhotoButton: UIButton!
-    
     @IBOutlet weak var activity: UIActivityIndicatorView!
     
-    var picker:UIImagePickerController=UIImagePickerController()
+    var picker: UIImagePickerController = UIImagePickerController()
     
-   
+    var model: IProfileModel
     
-    var model:IProfileViewControllerModel
-    
-    init(model:IProfileViewControllerModel) {
+    init(model: IProfileModel) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,9 +43,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillShow, object: nil, queue: nil, using: self.keyboardWillShow)
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: nil, using: self.keyboardWillHide)
-        
-        
-        
 
         photoImageView.layer.cornerRadius = 50
         makePhotoButton.layer.cornerRadius = 50
@@ -66,30 +52,22 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         makePhotoButton.clipsToBounds = true
         
         activity.hidesWhenStopped = true
- 
-        loadDataFromProfile()
         
-        setupButton(button: gcdButton)
-        setupButton(button: operationButton)
+        setupButton(button: saveButton)
+//        setupButton(button: operationButton)
         setupView(view: infoTextView, radius: 10)
         setupView(view: activity, radius: Float(activity.bounds.size.width/2.0))
         
-        
-        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        
-        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
         tap.cancelsTouchesInView = false
-        
         view.addGestureRecognizer(tap)
         
-        model.gcdManager.readProfile()
+        showProfile()
+        activityStartAnimate()
+        model.readProfile()
     }
     
-    
-    
     @objc func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     
@@ -187,7 +165,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.dismiss(animated: true, completion: nil)
     }
     
-    func loadDataFromProfile(){
+    func showProfile() {
         photoImageView.image = model.profile.avatar
         nameTextField.text = model.profile.name
         infoTextView.text = model.profile.info
@@ -196,14 +174,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func setSaveButtonsAvalibleState(){
         if(model.profile.needSave){
-            gcdButton.isEnabled = true
-            operationButton.isEnabled = true
-            operationButton.backgroundColor = .green
+            saveButton.isEnabled = true
+            saveButton.backgroundColor = .green
+//            operationButton.isEnabled = true
+//            operationButton.backgroundColor = .green
         }
         else{
-            gcdButton.isEnabled = false
-            operationButton.isEnabled = false
-            operationButton.backgroundColor = .red
+            saveButton.isEnabled = false
+            saveButton.backgroundColor = .red
+//            operationButton.isEnabled = false
+//            operationButton.backgroundColor = .red
         }
     }
     
@@ -221,54 +201,55 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         setSaveButtonsAvalibleState()
     }
     
-    
-
-    
-    
-    
-    @IBAction func gcdSaveAction(_ sender: Any) {
-        self.model.gcdSave()
+    @IBAction func saveAction(_ sender: Any) {
+        activityStartAnimate()
+        self.model.profileManager = .CoreDataManager
+        self.model.saveProfile()
     }
     
-    @IBAction func operationSaveAction(_ sender: Any) {
-        self.model.operationSave()
-    }
+//    @IBAction func operationSaveAction(_ sender: Any) {
+//        activityStartAnimate()
+//        self.model.profileManager = .OperationManager
+//        self.model.saveProfile()
+//    }
     
     func activityStartAnimate(){
-        activity.isHidden=false
+        activity.isHidden = false
         activity.startAnimating()
         activity.hidesWhenStopped = true
     }
     func activityStopAnimate(){
-        activity.isHidden=true
+        activity.isHidden = true
         activity.hidesWhenStopped = true
         activity.stopAnimating()
     }
     
     
-    func showSucsessAlert(){
+    func showSuccessAlert(){
+        
         let optionMenu = UIAlertController(title: "Даные сохранены", message: nil, preferredStyle: .actionSheet)
         
         let okAction = UIAlertAction(title: "ОК", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             DispatchQueue.main.async() {
-               self.loadDataFromProfile()
-            optionMenu.dismiss(animated: true, completion: nil)
+                self.showProfile()
+                self.activityStopAnimate()
+                optionMenu.dismiss(animated: true, completion: nil)
             }})
         
         optionMenu.addAction(okAction)
         self.present(optionMenu, animated: true, completion: nil)
     }
     
-    func showErrorAlert(string:String, gcdMode:Bool){
-        let optionMenu = UIAlertController(title: "Ошибка", message: string, preferredStyle: .actionSheet)
+    func showErrorAlert(){
+        
+        let optionMenu = UIAlertController(title: "Ошибка", message: nil, preferredStyle: .actionSheet)
         
         let cancelAction = UIAlertAction(title: "Отмена", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             DispatchQueue.main.async() {
+                self.model.readProfile()
                 self.activityStopAnimate()
-                self.model.gcdManager.readProfile()
-                
             }
             optionMenu.dismiss(animated: true, completion: nil)
             
@@ -276,12 +257,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         let againAction = UIAlertAction(title: "Повторить", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            if gcdMode {
-                self.model.gcdSave()
+            DispatchQueue.main.async() {
+                self.activityStartAnimate()
             }
-            else{
-                self.model.operationSave()
-            }
+            self.model.saveProfile()
         })
         
         optionMenu.addAction(cancelAction)
@@ -299,12 +278,8 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func update(){
-        loadDataFromProfile()
-    }
-    
-    func receiveProfile(profile: Profile) {
-        model.profile=profile
-        self.loadDataFromProfile()
+        self.activityStopAnimate()
+        showProfile()
     }
     
 }

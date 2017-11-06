@@ -13,7 +13,7 @@ class MultipeerCommunicator:NSObject, ICommunicator {
     
     private var sessions = [ String : MCSession ]()
     
-    private let peerID = MCPeerID(displayName: UIDevice.current.identifierForVendor?.uuidString ?? "volodinKirill")
+    private let peerID = MCPeerID(displayName: UIDevice.current.identifierForVendor?.uuidString ?? "volodin")
     private var browser: MCNearbyServiceBrowser!
     private var advertiser: MCNearbyServiceAdvertiser!
     
@@ -124,7 +124,7 @@ extension MultipeerCommunicator: MCSessionDelegate {
                 return
             }
             print("%@", messageJson)
-            delegate?.didReceiveMessage(text: messageText, fromUser: peerID.displayName, toUser: UUID().uuidString)
+            delegate?.didReceiveMessage(text: messageText, fromUser: peerID.displayName, toUser: UIDevice.current.identifierForVendor?.uuidString ?? "volodin")
         } catch {
             print("Error parsing message json: \(error.localizedDescription)")
         }

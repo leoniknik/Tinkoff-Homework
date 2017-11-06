@@ -8,22 +8,20 @@
 
 import UIKit
 
-class OperationTaskManager : TaskManager, ProfileService  {
+class OperationTaskManager : IProfileStorage  {
 
     let operationQueue = OperationQueue()
-    var delegate:TaskManagerDelegate?
+    weak var delegate: IProfileStorageDelegate?
     
-    func saveProfile(profile:Profile) {
-        delegate?.startAnimate()
+    func saveProfile(profile: IProfileProtocol) {
         let saveOperation = SaveProfileOperation(profile: profile)
         saveOperation.completionBlock = {
-            if let result = saveOperation.result {
+            if saveOperation.result != nil {
                 DispatchQueue.main.async() {
-                    self.delegate?.showErrorAlert(string: result,gcdMode: false)
+                    self.delegate?.showErrorAlert()
                 }
             } else {
                 DispatchQueue.main.async() {
-                    self.delegate?.stopAnimate()
                     self.delegate?.showSucsessAlert()
                 }
             }
@@ -32,13 +30,11 @@ class OperationTaskManager : TaskManager, ProfileService  {
     }
     
     func readProfile() {
-        delegate?.startAnimate()
         let readOperation = ReadProfileOperation()
         readOperation.completionBlock = {
             if let profile = readOperation.profile {
                 DispatchQueue.main.async() {
                     self.delegate?.receiveProfile(profile: profile)
-                    self.delegate?.stopAnimate()
                 }
             }
         }
@@ -49,7 +45,6 @@ class OperationTaskManager : TaskManager, ProfileService  {
 
 class AsyncOperation: Operation {
     
-    // Определяем перечисление enum State со свойством keyPath
     enum State: String {
         case ready, executing, finished
         
@@ -58,7 +53,6 @@ class AsyncOperation: Operation {
         }
     }
     
-    // Помещаем в subclass свойство state типа State
     var state = State.ready {
         willSet {
             willChangeValue(forKey: newValue.keyPath)
@@ -72,7 +66,7 @@ class AsyncOperation: Operation {
 }
 
 extension AsyncOperation {
-    // Переопределения для Operation
+
     override var isReady: Bool {
         return super.isReady && state == .ready
     }
@@ -104,27 +98,26 @@ extension AsyncOperation {
     
 }
 
-class ReadProfileOperation: AsyncOperation, ProfileService {
-    var profile:Profile?
+class ReadProfileOperation: AsyncOperation, IProfileLoaderProtocol {
+    var profile: IProfileProtocol?
     
     override func main() {
-        profile = getProfileService()
-        sleep(4)
+        profile = readProfileFromFile()
         self.state = .finished
     }
 }
 
-class SaveProfileOperation: AsyncOperation, ProfileService {
-    var result:String?
-    var profile:Profile
+class SaveProfileOperation: AsyncOperation, IProfileLoaderProtocol {
     
-    init(profile:Profile) {
+    var result: String?
+    var profile: IProfileProtocol
+    
+    init(profile: IProfileProtocol) {
         self.profile = profile
         super.init()
     }
     override func main() {
-        result = saveProfileService(profile: profile)//saveProfileService()
-        sleep(4)
+        result = saveProfileToFile(profile: profile)
         self.state = .finished
     }
 }

@@ -35,7 +35,6 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         super.viewDidLoad()
         setupTableView()
         setupNavigationItem()
-//        navigationController.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(Add:)] autorelease];
     }
     
     func setupNavigationItem() {
@@ -50,7 +49,9 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     }
 
     @objc func goToProfile() {
-        self.present(ProfileViewControllerAssembler.createProfileViewControllerAssembler(), animated: true, completion: nil)
+        let assembly = ProfileAssembly()
+        let controller = assembly.profileViewController()
+        self.present(controller, animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {

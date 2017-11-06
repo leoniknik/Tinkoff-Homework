@@ -8,39 +8,35 @@
 
 import Foundation
 
-class GCDTaskManager :TaskManager, ProfileService {
-
-
-    var delegate:TaskManagerDelegate?
+class GCDTaskManager: IProfileStorage, IProfileLoaderProtocol {
     
+    weak var delegate: IProfileStorageDelegate?
     
-    func saveProfile(profile:Profile) {
-        delegate?.startAnimate()
+    func saveProfile(profile: IProfileProtocol) {
         let queue = DispatchQueue.global(qos: .userInitiated)
         
         queue.async() {
-            if let result = self.saveProfileService(profile: profile){
+            if self.saveProfileToFile(profile: profile) != nil{
                 DispatchQueue.main.async() {
-                    self.delegate?.showErrorAlert(string: result,gcdMode: true)
+                    self.delegate?.showErrorAlert()
                 }
             }else{
                 DispatchQueue.main.async() {
-                    self.delegate?.stopAnimate()
                     self.delegate?.showSucsessAlert()
                 }
             }
-            
         }
     }
     
     func readProfile() {
-        delegate?.startAnimate()
         let queue = DispatchQueue.global(qos: .userInitiated)
         queue.async() {
-            let profile = self.getProfileService()
+            guard let profile = self.readProfileFromFile() else {
+                self.delegate?.showErrorAlert()
+                return
+            }
             DispatchQueue.main.async() {
                 self.delegate?.receiveProfile(profile: profile)
-                self.delegate?.stopAnimate()
             }
         }
     }
