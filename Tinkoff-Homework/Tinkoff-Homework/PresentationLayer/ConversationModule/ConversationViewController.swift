@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConversationViewController: UIViewController,UITableViewDelegate,UITableViewDataSource, ConversationModelDelegate,CommunicationManagerDelegate{
+class ConversationViewController: UIViewController,UITableViewDelegate,UITableViewDataSource, IConversationModelDelegate {
     
     func updateConversationsList() {
         model.getDialog()

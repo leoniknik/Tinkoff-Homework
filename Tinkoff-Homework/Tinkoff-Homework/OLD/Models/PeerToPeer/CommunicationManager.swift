@@ -7,19 +7,25 @@
 
 import Foundation
 
-protocol CommunicationManagerDelegate: class {
+protocol ICommunicationManager { //!!!
+    weak var listDelegate: ICommunicationManagerDelegate? {get set}
+    weak var conversationDelegate: ICommunicationManagerDelegate? {get set}
+    func getConversations() -> [ConversationElement]
+}
+
+protocol ICommunicationManagerDelegate: class {
     func updateConversationsList()
     func updateCurrentConversation()
 }
 
-class CommunicationManager: CommunicatorDelegate {
+class CommunicationManager: ICommunicationManager, ICommunicatorDelegate {
     
-    var communicator: MultipeerCommunicator
+    var communicator: ICommunicator
 
-    weak var listDelegate: CommunicationManagerDelegate?
-    weak var conversationDelegate: CommunicationManagerDelegate?
+    weak var listDelegate: ICommunicationManagerDelegate?
+    weak var conversationDelegate: ICommunicationManagerDelegate?
     
-    init(multipeerCommunicator:MultipeerCommunicator) {
+    init(multipeerCommunicator: ICommunicator) {
         self.communicator = multipeerCommunicator
     }
     
@@ -38,7 +44,7 @@ class CommunicationManager: CommunicatorDelegate {
             
             DispatchQueue.main.async {
                 self.listDelegate?.updateConversationsList()
-                    self.conversationDelegate?.updateCurrentConversation()
+                self.conversationDelegate?.updateCurrentConversation()
             }
         
         }

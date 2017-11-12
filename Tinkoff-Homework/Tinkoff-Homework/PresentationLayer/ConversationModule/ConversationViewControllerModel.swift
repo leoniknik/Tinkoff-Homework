@@ -8,15 +8,15 @@
 
 import Foundation
 
-protocol ConversationModelDelegate{
+protocol IConversationModelDelegate: class {
     func setupDialog(dialog:ConversationElement)
 }
 
 protocol IConversationModel{
-    var communicationManager:CommunicatorDelegate {get set}
+    var communicationManager: ICommunicationManager {get set}
     var userName:String {get set}
     var userID:String {get set}
-    var delegate:ConversationModelDelegate? {get set}
+    weak var delegate: IConversationModelDelegate? {get set}
     var key: Int {get set}
     
     func getDialog()
@@ -24,15 +24,24 @@ protocol IConversationModel{
     func sendMessage(string: String, to: String)
 }
 
-class ConversationModel:IConversationModel{
+class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
     
-    var communicationManager:CommunicatorDelegate
+    func updateConversationsList() {
+        
+    }
+    
+    func updateCurrentConversation() {
+        
+    }
+    
+    
+    var communicationManager: ICommunicationManager
     var userName:String
     var userID:String
-    var delegate:ConversationModelDelegate?
+    weak var delegate: IConversationModelDelegate?
     var key: Int
     
-    init(userName:String,userID:String, key: Int, communicationManager:CommunicatorDelegate) {
+    init(userName:String,userID:String, key: Int, communicationManager: ICommunicationManager) {
         self.userID=userID
         self.userName=userName
         self.communicationManager = communicationManager
@@ -40,18 +49,20 @@ class ConversationModel:IConversationModel{
     }
     
     func getDialog(){
-        let item = communicationManager.getConversation(key: key)
-        delegate?.setupDialog(dialog: item)
+//        let item = communicationManager.getConversation(key: key)
+//        delegate?.setupDialog(dialog: item)
     }
     
     func updateUnread(){
-        let item = communicationManager.getConversation(key: key)
-        item.hasUnreadMessages = false
+//        let item = communicationManager.getConversation(key: key)
+//        item.hasUnreadMessages = false
     }
     
     func sendMessage(string: String, to: String){
-//        communicationManager.multipeerCommunicator.sendMessage(string: string, to: to, completionHandler: nil)
-        communicationManager.communicator.sendMessage(string: string, to: to, completionHandler: nil)
+//        communicationManager.multipeerCommunicator.sendMessage(string: string, to: to, completionHandler: nil) не
+        
+        
+//        communicationManager.communicator.sendMessage(string: string, to: to, completionHandler: nil)
     }
     
     

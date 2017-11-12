@@ -9,17 +9,25 @@
 import Foundation
 
 class ConversationsListAssembly {
-    static func conversationsListViewController()-> ConversationsListViewController{
+    
+    private var communicationManager: ICommunicationManager
+    private var rootAssembly: RootAssembly
+    
+    init(rootAssembly: RootAssembly, manager: ICommunicationManager) {
+        self.communicationManager = manager
+        self.rootAssembly = rootAssembly
+    }
+    
+    func conversationsListViewController() -> ConversationsListViewController {
         
-        let manager = rootAssembly.communicationManager
-        let model = ConversationsListModel()
+        let model = ConversationsListModel(communicationManager: communicationManager)
+        communicationManager.listDelegate = model
         
-        let viewController = ConversationsListViewController(model: model)
-        viewController.model = model as ConversationsListModel
+        let viewController = ConversationsListViewController(rootAssembly: rootAssembly, model: model)
+        viewController.model = model
         model.delegate = viewController
-        
-        manager.listDelegate = viewController
         
         return viewController
     }
+    
 }

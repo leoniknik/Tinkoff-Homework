@@ -9,6 +9,29 @@
 import Foundation
 import MultipeerConnectivity
 
+protocol ICommunicator {
+    func sendMessage(string: String, to userID: String, completionHandler: ((_ sucsess: Bool, _ error: Error?) -> ())?)
+    weak var delegate : ICommunicatorDelegate? {get set}
+    var online: Bool {get set}
+}
+
+protocol ICommunicatorDelegate : class {
+    
+    var communicator: ICommunicator {get set} //!!!
+    
+    func didFoundUser(userID: String, userName: String?)
+    func didLostUser(userID: String)
+    func userDidBecome(userID: String, online:Bool)
+    
+    func failedToStartBrowsingForUsers(error: Error)
+    func failedToStartAdvertising(error: Error)
+    
+    func didReceiveMessage(text: String, fromUser: String, toUser: String)
+    
+    func getConversation(key: Int) -> ConversationElement
+    
+}
+
 class MultipeerCommunicator:NSObject, ICommunicator {
     
     private var sessions = [ String : MCSession ]()
@@ -21,7 +44,7 @@ class MultipeerCommunicator:NSObject, ICommunicator {
     private let discoveryInfo = ["userName" : "volodin"]
     private let messageEvent = "TextMessage"
     
-    weak var delegate: CommunicatorDelegate?
+    weak var delegate: ICommunicatorDelegate?
     var online: Bool = true
     
     override init() {
@@ -75,9 +98,7 @@ class MultipeerCommunicator:NSObject, ICommunicator {
             }
         }
         
-        
-        //
-        delegate?.didReceiveMessage(text: string, fromUser: "volodin", toUser: userID)
+        delegate?.didReceiveMessage(text: string, fromUser: "volodin", toUser: userID) //!!!
     }
     
     func createMessage(withText text: String) -> Data? {
@@ -99,8 +120,6 @@ class MultipeerCommunicator:NSObject, ICommunicator {
             return nil
         }
     }
-    
-    // MARK: generate ID
     
     func generateMessageId() -> String? {
         let string = "\(arc4random_uniform(UINT32_MAX))+\(Date.timeIntervalSinceReferenceDate)+\(arc4random_uniform(UINT32_MAX))".data(using: .utf8)?.base64EncodedString()

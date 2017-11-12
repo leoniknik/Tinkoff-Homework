@@ -8,16 +8,16 @@
 
 import UIKit
 
-class ConversationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CommunicationManagerDelegate, IConversationsListModelDelegate {
+class ConversationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, IConversationsListModelDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
-    
+    var rootAssembly: RootAssembly
     var model : IConversationsListModel
     
-    
-    init(model: IConversationsListModel) {
+    init(rootAssembly: RootAssembly, model: IConversationsListModel) {
         self.model = model
+        self.rootAssembly = rootAssembly
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -26,15 +26,15 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     }
     
     
-    var conversationOnlineList = [ConversationElement]()
-    var conversationOfflineList = [ConversationElement]()
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         setupNavigationItem()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateConversationsList()
     }
     
     func setupNavigationItem() {
@@ -47,27 +47,17 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         }
         
     }
-
-    @objc func goToProfile() {
-        let assembly = ProfileAssembly()
-        let controller = assembly.profileViewController()
-        self.present(controller, animated: true, completion: nil)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        setupUI()
-        tableView.reloadData()
-    }
     
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ConversationCell", bundle: nil), forCellReuseIdentifier: "ConversationCell")
     }
-    
-    func updateCurrentConversation() {
-        print()
+
+    @objc func goToProfile() {
+        let assembly = ProfileAssembly()
+        let controller = assembly.profileViewController()
+        self.present(controller, animated: true, completion: nil)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -76,10 +66,10 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return conversationOnlineList.count
+            return model.conversationOnlineList.count
         }
         else {
-            return conversationOfflineList.count
+            return model.conversationOfflineList.count
         }
     }
     
@@ -88,10 +78,10 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         let cell = tableView.dequeueReusableCell(withIdentifier: "ConversationCell") as! ConversationCellConfiguration
         let conversation: ConversationElement
         if indexPath.section == 0 {
-            conversation = conversationOnlineList[indexPath.row]
+            conversation = model.conversationOnlineList[indexPath.row]
         }
         else {
-            conversation = conversationOfflineList[indexPath.row]
+            conversation = model.conversationOfflineList[indexPath.row]
         }
         
         if let message = conversation.messages.last {
@@ -124,59 +114,18 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-        if let index = tableView.indexPathForSelectedRow {
-            let conversation = model.communicationManager.converationList[index.row]
-            conversation.hasUnreadMessages = false
-            let controller = ConversationAsembler.createConversationsViewController(userName: conversation.name, userID: conversation.userId, key: index.row)
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-        
-        tableView.deselectRow(at: indexPath, animated: false)
+//        if let index = tableView.indexPathForSelectedRow {
+//            let conversation = model.communicationManager.converationList[index.row]
+//            conversation.hasUnreadMessages = false
+//            let controller = ConversationAsembler.createConversationsViewController(userName: conversation.name, userID: conversation.userId, key: index.row)
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
+//        
+//        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     func updateConversationsList() {
-        model.getConversations()
         tableView.reloadData()
-    }
-    
-    func setupDialogs(allConversatios allDialogs: [ConversationElement]){
-        
-        conversationOnlineList.removeAll()
-        conversationOfflineList.removeAll()
-        
-        var onWith = [ConversationElement]()
-        var onWithout = [ConversationElement]()
-        var offWith = [ConversationElement]()
-        var offWithout = [ConversationElement]()
-        
-        for dialog in allDialogs{
-            if(dialog.online){
-                if(dialog.messages.count>0){
-                    onWith.append(dialog)
-                }else{
-                    onWithout.append(dialog)
-                }
-            }else{
-                if(dialog.messages.count>0){
-                    offWith.append(dialog)
-                }else{
-                    offWithout.append(dialog)
-                }
-            }
-        }
-        
-        onWith.sort{$0.messages.last?.date ?? Date() < $1.messages.last?.date ?? Date()}
-        offWith.sort{$0.messages.last?.date ?? Date() < $1.messages.last?.date ?? Date()}
-        
-        onWithout.sort{$0.name<$1.name}
-        offWithout.sort{$0.name<$1.name}
-        
-        self.conversationOnlineList = onWith
-        self.conversationOnlineList.append(contentsOf: onWithout)
-        
-        self.conversationOfflineList = offWith
-        self.conversationOfflineList.append(contentsOf: offWithout)
-        
     }
     
     

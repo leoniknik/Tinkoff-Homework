@@ -9,12 +9,15 @@
 import Foundation
 
 class ConversationAsembler{
-    static func createConversationsViewController(userName:String,userID:String, key: Int)->ConversationViewController{
-        let communicationManager = rootAssembly.communicationManager
+    func conversationViewController(userName: String, userID: String, key: Int, communicationManager: ICommunicationManager) -> ConversationViewController {
+        
+        var manager = communicationManager
         let model = ConversationModel(userName:userName,userID:userID, key:key, communicationManager:communicationManager)
-        let controller = ConversationViewController(model:model)
+        manager.conversationDelegate = model
+        
+        let controller = ConversationViewController(model: model)
         model.delegate = controller
-        communicationManager.conversationDelegate = controller
+        
         return controller
     }
 }
