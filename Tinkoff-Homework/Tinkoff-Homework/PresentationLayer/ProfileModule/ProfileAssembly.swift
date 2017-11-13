@@ -11,11 +11,9 @@ import Foundation
 class ProfileAssembly {
     
     private var coreDataStack: CoreDataStack
-    private var rootAssembly: RootAssembly
     
-    init(rootAssembly: RootAssembly, coreDataStack: CoreDataStack) {
+    init(coreDataStack: CoreDataStack) {
         self.coreDataStack = coreDataStack
-        self.rootAssembly = rootAssembly
     }
     
     func profileViewController() -> ProfileViewController {

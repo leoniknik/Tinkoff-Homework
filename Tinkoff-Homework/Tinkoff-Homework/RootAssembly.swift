@@ -28,10 +28,10 @@ class RootAssembly {
 //    }()
     
     lazy var profileAssembly: ProfileAssembly = {
-        return ProfileAssembly(rootAssembly: self, coreDataStack: coreDataStack)
+        return ProfileAssembly(coreDataStack: CoreDataStack())
     }()
     
-    lazy private var coreDataStack: CoreDataStack = {
+    var coreDataStack: CoreDataStack = {
         return CoreDataStack()
     }()
     
