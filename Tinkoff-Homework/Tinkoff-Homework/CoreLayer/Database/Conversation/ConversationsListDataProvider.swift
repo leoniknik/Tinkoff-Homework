@@ -20,12 +20,12 @@ protocol IConversationsListDataProviderDelegate {
 class ConversationsListDataProvider: NSObject, IConversationsListDataProvider {
     var fetchedResultsController: NSFetchedResultsController<ConversationEntity>?
     let tableView: UITableView
-    let coreDataStack: CoreDataStack
+    var coreDataStack: CoreDataStack
     
-    init(tableView: UITableView, stack: CoreDataStack) {
+    init(tableView: UITableView, coreDataStack: CoreDataStack) {
         
+        self.coreDataStack = coreDataStack
         self.tableView = tableView
-        self.coreDataStack = stack
         
         super.init()
         
@@ -33,18 +33,18 @@ class ConversationsListDataProvider: NSObject, IConversationsListDataProvider {
             let fetchRequestsFactory = FetchRequestsFactory()
             let fetchRequest = fetchRequestsFactory.fetchRequestAllConversations()
         
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(ConversationEntity.lastMessage.date), ascending: false)]
             fetchedResultsController = NSFetchedResultsController<ConversationEntity>(fetchRequest: fetchRequest,
-                                                               managedObjectContext: context,
-                                                               sectionNameKeyPath: #keyPath(ConversationEntity.isOnline),
-                                                               cacheName: nil)
-            
+                                                           managedObjectContext: context,
+                                                           sectionNameKeyPath: #keyPath(ConversationEntity.isOnline),
+                                                           cacheName: nil)
             fetchedResultsController?.delegate = self
             
             do {
-                try fetchedResultsController?.performFetch()
-            }
-            catch {
-                print(error)
+                try self.fetchedResultsController?.performFetch()
+                self.tableView.reloadData()
+            } catch {
+                print("Error: \(error)")
             }
         }
     }

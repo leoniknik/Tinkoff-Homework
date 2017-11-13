@@ -8,11 +8,18 @@
 
 import Foundation
 
-class ConversationAsembler{
-    func conversationViewController(userName: String, userID: String, key: Int, communicationManager: ICommunicationManager) -> ConversationViewController {
+class ConversationAssembly {
+    
+    private var communicationManager: ICommunicationManager
+    
+    init(manager: ICommunicationManager) {
+        self.communicationManager = manager
+    }
+    
+    func conversationViewController() -> ConversationViewController {
         
         var manager = communicationManager
-        let model = ConversationModel(userName:userName,userID:userID, key:key, communicationManager:communicationManager)
+        let model = ConversationModel(communicationManager: communicationManager)
         manager.conversationDelegate = model
         
         let controller = ConversationViewController(model: model)

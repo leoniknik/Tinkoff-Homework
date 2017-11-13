@@ -25,7 +25,6 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         return nil
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
@@ -34,7 +33,7 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateConversationsList()
+        tableView.reloadData()
     }
     
     func setupNavigationItem() {
@@ -49,6 +48,7 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     }
     
     func setupTableView() {
+        model.initFetchedResultsManagerFor(tableView: tableView)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ConversationCell", bundle: nil), forCellReuseIdentifier: "ConversationCell")
@@ -61,51 +61,40 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return model.numberOfSection()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return model.conversationOnlineList.count
-        }
-        else {
-            return model.conversationOfflineList.count
-        }
+        print(model.numberOfRowsIn(section: section))
+        return model.numberOfRowsIn(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ConversationCell") as! ConversationCellConfiguration
-        let conversation: ConversationElement
-        if indexPath.section == 0 {
-            conversation = model.conversationOnlineList[indexPath.row]
-        }
-        else {
-            conversation = model.conversationOfflineList[indexPath.row]
-        }
         
-        if let message = conversation.messages.last {
-            cell.message = message.text
+        if let conversation = model.getConversation(indexPath: indexPath) {
+
+        if let message = conversation.message {
+            cell.message = message
         } else {
             cell.message = "No messages yet"
         }
         
         cell.name = conversation.name
         cell.date = conversation.lastMessageDate
+        print(conversation.online)
         cell.online = conversation.online
         cell.hasUnreadMessages = conversation.hasUnreadMessages
+            
+        }
         
         return cell as! UITableViewCell
         
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Online"
-        }
-        else {
-            return "History"
-        }
+        return model.getNameForSection(section: section)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -114,18 +103,19 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-//        if let index = tableView.indexPathForSelectedRow {
-//            let conversation = model.communicationManager.converationList[index.row]
-//            conversation.hasUnreadMessages = false
-//            let controller = ConversationAsembler.createConversationsViewController(userName: conversation.name, userID: conversation.userId, key: index.row)
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
-//        
-//        tableView.deselectRow(at: indexPath, animated: false)
+        if let index = tableView.indexPathForSelectedRow {
+            if let conversation = model.getConversation(indexPath: index),
+                let id = conversation.id {
+//               rootAssembly.conversationModule.setup(inViewController: conversationVC, communicationService: communicationService, conversationID: id)
+                rootAssembly
+            }
+        }
+        
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     func updateConversationsList() {
-        tableView.reloadData()
+
     }
     
     

@@ -10,22 +10,27 @@ import Foundation
 import CoreData
 
 struct FetchRequestsFactory {
+    
+    let conversationEntityName = "ConversationEntity"
+    
 //    let model: NSManagedObjectModel?
 //    
 //    init(model: NSManagedObjectModel?) {
 //        self.model = model
 //    }
 //    
-    func fetchRequestAllConversations() -> NSFetchRequest<ConversationEntity> {
-        
-        let fetchRequest = NSFetchRequest<ConversationEntity>(entityName: "Conversation")
-        let onlineDescriptor = NSSortDescriptor(key: #keyPath(ConversationEntity.isOnline), ascending: false)
-        let dateDescriptor = NSSortDescriptor(key: #keyPath(ConversationEntity.lastMessage.date), ascending: false)
-        fetchRequest.sortDescriptors = [onlineDescriptor,
-                                        dateDescriptor]
+
+    func fetchRequestOnlineConversations() -> NSFetchRequest<ConversationEntity> {
+        let fetchRequest = NSFetchRequest<ConversationEntity>(entityName: conversationEntityName)
+        fetchRequest.predicate = NSPredicate(format: "user.isOnline == %@", NSNumber(booleanLiteral: true))
         return fetchRequest
-        
     }
+    
+    func fetchRequestAllConversations() -> NSFetchRequest<ConversationEntity> {
+        let fetchRequest = NSFetchRequest<ConversationEntity>(entityName: conversationEntityName)
+        return fetchRequest
+    }
+    
 //
 //    func fetchRequestConversationByID(id: String) -> NSFetchRequest<Conversation>? {
 //        if let model = model {

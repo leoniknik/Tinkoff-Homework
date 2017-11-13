@@ -42,8 +42,8 @@
 		CAA730701FA8AF81000F7C1C /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA730671FA8AF80000F7C1C /* ConversationViewController.swift */; };
 		CAA730721FA8AF81000F7C1C /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA730691FA8AF80000F7C1C /* MessageCell.swift */; };
 		CAA730731FA8AF81000F7C1C /* OutcomeMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CAA7306A1FA8AF80000F7C1C /* OutcomeMessageCell.xib */; };
-		CAA730741FA8AF81000F7C1C /* ConversationViewControllerAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA7306B1FA8AF80000F7C1C /* ConversationViewControllerAssembler.swift */; };
-		CAA730751FA8AF81000F7C1C /* ConversationViewControllerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA7306C1FA8AF80000F7C1C /* ConversationViewControllerModel.swift */; };
+		CAA730741FA8AF81000F7C1C /* ConversationAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA7306B1FA8AF80000F7C1C /* ConversationAssembly.swift */; };
+		CAA730751FA8AF81000F7C1C /* ConversationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA7306C1FA8AF80000F7C1C /* ConversationModel.swift */; };
 		CAA730761FA8AF81000F7C1C /* IncomeMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CAA7306D1FA8AF81000F7C1C /* IncomeMessageCell.xib */; };
 		CAAE9B811F9CFD9E00FCFC39 /* MultipeerCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAAE9B801F9CFD9E00FCFC39 /* MultipeerCommunicator.swift */; };
 		CAD777FD1FA88CB40081A510 /* ConversationsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD777FC1FA88CB40081A510 /* ConversationsListModel.swift */; };
@@ -88,8 +88,8 @@
 		CAA730671FA8AF80000F7C1C /* ConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		CAA730691FA8AF80000F7C1C /* MessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		CAA7306A1FA8AF80000F7C1C /* OutcomeMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OutcomeMessageCell.xib; sourceTree = "<group>"; };
-		CAA7306B1FA8AF80000F7C1C /* ConversationViewControllerAssembler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewControllerAssembler.swift; sourceTree = "<group>"; };
-		CAA7306C1FA8AF80000F7C1C /* ConversationViewControllerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewControllerModel.swift; sourceTree = "<group>"; };
+		CAA7306B1FA8AF80000F7C1C /* ConversationAssembly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationAssembly.swift; sourceTree = "<group>"; };
+		CAA7306C1FA8AF80000F7C1C /* ConversationModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationModel.swift; sourceTree = "<group>"; };
 		CAA7306D1FA8AF81000F7C1C /* IncomeMessageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IncomeMessageCell.xib; sourceTree = "<group>"; };
 		CAAE9B801F9CFD9E00FCFC39 /* MultipeerCommunicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerCommunicator.swift; sourceTree = "<group>"; };
 		CAD777FC1FA88CB40081A510 /* ConversationsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListModel.swift; sourceTree = "<group>"; };
@@ -155,8 +155,8 @@
 			children = (
 				CAA730671FA8AF80000F7C1C /* ConversationViewController.swift */,
 				CAA730661FA8AF80000F7C1C /* ConversationViewController.xib */,
-				CAA7306B1FA8AF80000F7C1C /* ConversationViewControllerAssembler.swift */,
-				CAA7306C1FA8AF80000F7C1C /* ConversationViewControllerModel.swift */,
+				CAA7306B1FA8AF80000F7C1C /* ConversationAssembly.swift */,
+				CAA7306C1FA8AF80000F7C1C /* ConversationModel.swift */,
 				CAA7306D1FA8AF81000F7C1C /* IncomeMessageCell.xib */,
 				CAA730691FA8AF80000F7C1C /* MessageCell.swift */,
 				CAA7306A1FA8AF80000F7C1C /* OutcomeMessageCell.xib */,
@@ -368,8 +368,8 @@
 				CA2F2D151FA881F90024A717 /* ConversationCell.swift in Sources */,
 				CA37046D1FA8BEB200B5B6C1 /* CommunicationManager.swift in Sources */,
 				CA46EFC01FB99D1C00963A72 /* ConversationStorageManager.swift in Sources */,
-				CAA730741FA8AF81000F7C1C /* ConversationViewControllerAssembler.swift in Sources */,
-				CAA730751FA8AF81000F7C1C /* ConversationViewControllerModel.swift in Sources */,
+				CAA730741FA8AF81000F7C1C /* ConversationAssembly.swift in Sources */,
+				CAA730751FA8AF81000F7C1C /* ConversationModel.swift in Sources */,
 				CA46EFBA1FB9994B00963A72 /* User.swift in Sources */,
 				CA37B9341F9D638F007CE2EC /* ConversationItem.swift in Sources */,
 				CA46EFB81FB9992500963A72 /* AppUser.swift in Sources */,

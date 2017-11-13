@@ -14,10 +14,8 @@ protocol IConversationModelDelegate: class {
 
 protocol IConversationModel{
     var communicationManager: ICommunicationManager {get set}
-    var userName:String {get set}
-    var userID:String {get set}
+
     weak var delegate: IConversationModelDelegate? {get set}
-    var key: Int {get set}
     
     func getDialog()
     func updateUnread()
@@ -36,17 +34,22 @@ class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
     
     
     var communicationManager: ICommunicationManager
-    var userName:String
-    var userID:String
+//    var userName:String
+//    var userID:String
     weak var delegate: IConversationModelDelegate?
-    var key: Int
+//    var key: Int
     
-    init(userName:String,userID:String, key: Int, communicationManager: ICommunicationManager) {
-        self.userID=userID
-        self.userName=userName
+    init(communicationManager: ICommunicationManager) {
         self.communicationManager = communicationManager
-        self.key = key
     }
+
+    
+//    init(userName:String,userID:String, key: Int, communicationManager: ICommunicationManager) {
+//        self.userID=userID
+//        self.userName=userName
+//        self.communicationManager = communicationManager
+//        self.key = key
+//    }
     
     func getDialog(){
 //        let item = communicationManager.getConversation(key: key)

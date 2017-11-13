@@ -48,20 +48,9 @@ extension User {
         return nil
     }
     
-    
-    
     static var generatedUserIdString: String {
         return UIDevice.current.identifierForVendor?.uuidString ?? "volodin"
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     static func fetchRequestUserWithID(id: String, withModel model: NSManagedObjectModel) -> NSFetchRequest<User>? {
         
@@ -71,6 +60,18 @@ extension User {
         ]
         
         guard let fetchRequest = model.fetchRequestFromTemplate(withName: templateName, substitutionVariables: conditions) as? NSFetchRequest<User> else {
+            print("No template with name: \(templateName)")
+            return nil
+        }
+        
+        return fetchRequest
+    }
+    
+    static func fetchRequestUsersOnline(withModel model: NSManagedObjectModel) -> NSFetchRequest<User>? {
+        
+        let templateName = "UsersOnlineRequest"
+        
+        guard let fetchRequest = model.fetchRequestTemplate(forName: templateName) as? NSFetchRequest<User> else {
             print("No template with name: \(templateName)")
             return nil
         }

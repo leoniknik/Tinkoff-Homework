@@ -12,7 +12,7 @@ class RootAssembly {
     
     init() {
         let multipeerCommunicator = MultipeerCommunicator()
-        let manager = CommunicationManager(multipeerCommunicator: multipeerCommunicator)
+        let manager = CommunicationManager(multipeerCommunicator: multipeerCommunicator, conversationStorage: ConversationStorageManager(coreDataStack: coreDataStack) )
         communicationManager = manager
         multipeerCommunicator.delegate = manager
     }
@@ -22,13 +22,13 @@ class RootAssembly {
         return conversationsListAssembly
     }()
     
-//    lazy var conversationAssembly: ConversationAssembly = {
-//        let communicationAssembly = ConversationAssembly(communicationService)
-//        return communicationAssembly
-//    }()
+    lazy var conversationAssembly: ConversationAssembly = {
+        let communicationAssembly = ConversationAssembly(manager: communicationManager)
+        return communicationAssembly
+    }()
     
     lazy var profileAssembly: ProfileAssembly = {
-        return ProfileAssembly(coreDataStack: CoreDataStack())
+        return ProfileAssembly(coreDataStack: coreDataStack)
     }()
     
     var coreDataStack: CoreDataStack = {

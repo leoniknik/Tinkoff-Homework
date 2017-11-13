@@ -40,7 +40,7 @@ class ProfileAssembly {
     }
 
     private func storageManager() -> IProfileStorage {
-        return StorageManager(coreDataStack: coreDataStack)
+        return StorageManager(coreDataStack: CoreDataStack())
     }
     
     private func gcdTaskManager() -> IProfileStorage {

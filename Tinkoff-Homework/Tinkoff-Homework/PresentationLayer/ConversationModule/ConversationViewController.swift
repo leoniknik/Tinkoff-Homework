@@ -44,7 +44,7 @@ class ConversationViewController: UIViewController,UITableViewDelegate,UITableVi
     @IBOutlet weak var messageText: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = model.userName
+//        self.title = model.userName
         self.table.register(UINib.init(nibName: "IncomeMessageCell", bundle: nil), forCellReuseIdentifier: "IncomeMessageCell")
         self.table.register(UINib.init(nibName: "OutcomeMessageCell", bundle: nil), forCellReuseIdentifier: "OutcomeMessageCell")
         self.table.delegate = self
@@ -59,7 +59,7 @@ class ConversationViewController: UIViewController,UITableViewDelegate,UITableVi
     
     func setupDialog(dialog:ConversationElement){
                 DispatchQueue.main.async {
-                    self.messages = dialog.messages
+//                    self.messages = dialog.message
                     self.sendButton.isEnabled = dialog.online
                     self.table.reloadData()
                 }
@@ -108,7 +108,7 @@ class ConversationViewController: UIViewController,UITableViewDelegate,UITableVi
     
     @IBAction func send(_ sender: Any) {
         if let text = messageText.text {
-            model.sendMessage(string: text, to: model.userID)
+//            model.sendMessage(string: text, to: model.userID)
         }
 
     }

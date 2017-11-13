@@ -28,7 +28,7 @@ protocol ICommunicatorDelegate : class {
     
     func didReceiveMessage(text: String, fromUser: String, toUser: String)
     
-    func getConversation(key: Int) -> ConversationElement
+//    func getConversation(key: Int) -> ConversationElement
     
 }
 
@@ -41,7 +41,7 @@ class MultipeerCommunicator:NSObject, ICommunicator {
     private var advertiser: MCNearbyServiceAdvertiser!
     
     private let serviceType = "tinkoff-chat"
-    private let discoveryInfo = ["userName" : "volodin"]
+    private let discoveryInfo = ["userName" : "komp"]
     private let messageEvent = "TextMessage"
     
     weak var delegate: ICommunicatorDelegate?
@@ -98,7 +98,7 @@ class MultipeerCommunicator:NSObject, ICommunicator {
             }
         }
         
-        delegate?.didReceiveMessage(text: string, fromUser: "volodin", toUser: userID) //!!!
+        delegate?.didReceiveMessage(text: string, fromUser: UIDevice.current.identifierForVendor?.uuidString ?? "volodin", toUser: userID) //!!!
     }
     
     func createMessage(withText text: String) -> Data? {
