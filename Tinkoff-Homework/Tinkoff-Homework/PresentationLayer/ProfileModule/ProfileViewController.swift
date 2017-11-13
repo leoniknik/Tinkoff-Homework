@@ -207,12 +207,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.model.saveProfile()
     }
     
-//    @IBAction func operationSaveAction(_ sender: Any) {
-//        activityStartAnimate()
-//        self.model.profileManager = .OperationManager
-//        self.model.saveProfile()
-//    }
-    
     func activityStartAnimate(){
         activity.isHidden = false
         activity.startAnimating()

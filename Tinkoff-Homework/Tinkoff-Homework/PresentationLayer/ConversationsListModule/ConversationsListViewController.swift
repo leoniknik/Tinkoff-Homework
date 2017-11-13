@@ -55,7 +55,7 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     }
 
     @objc func goToProfile() {
-        let assembly = ProfileAssembly()
+        let assembly = rootAssembly.profileAssembly
         let controller = assembly.profileViewController()
         self.present(controller, animated: true, completion: nil)
     }

@@ -86,14 +86,6 @@ class CommunicationManager: ICommunicationManager, ICommunicatorDelegate {
         }
     }
     
-//    func selectCurrentConversation(withId userId: String) {
-//        currentConversationId = userId
-//        if let ind = converationList.index(where: {$0.userId == userId }) {
-//            converationList[ind].hasUnreadMessages = false
-//        }
-//
-//    }
-    
     // MARK: - CommunicatorDelegate
     
     func didFoundUser(userID: String, userName: String?) {

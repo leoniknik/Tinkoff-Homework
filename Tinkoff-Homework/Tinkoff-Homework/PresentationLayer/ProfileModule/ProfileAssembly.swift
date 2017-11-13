@@ -10,6 +10,14 @@ import Foundation
 
 class ProfileAssembly {
     
+    private var coreDataStack: CoreDataStack
+    private var rootAssembly: RootAssembly
+    
+    init(rootAssembly: RootAssembly, coreDataStack: CoreDataStack) {
+        self.coreDataStack = coreDataStack
+        self.rootAssembly = rootAssembly
+    }
+    
     func profileViewController() -> ProfileViewController {
         var profileService = self.profileService()
         let model = ProfileModel(profileService: profileService)
@@ -34,7 +42,7 @@ class ProfileAssembly {
     }
 
     private func storageManager() -> IProfileStorage {
-        return StorageManager(coreDataStack: CoreDataStack())
+        return StorageManager(coreDataStack: coreDataStack)
     }
     
     private func gcdTaskManager() -> IProfileStorage {

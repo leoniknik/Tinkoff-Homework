@@ -27,4 +27,12 @@ class RootAssembly {
 //        return communicationAssembly
 //    }()
     
+    lazy var profileAssembly: ProfileAssembly = {
+        return ProfileAssembly(rootAssembly: self, coreDataStack: coreDataStack)
+    }()
+    
+    lazy private var coreDataStack: CoreDataStack = {
+        return CoreDataStack()
+    }()
+    
 }

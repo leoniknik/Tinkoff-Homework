@@ -35,10 +35,15 @@
         <relationship name="outcomingMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MessageEntity" inverseName="sender" inverseEntity="MessageEntity" syncable="YES"/>
     </entity>
     <fetchRequest name="AppUserRequest" entity="AppUser"/>
+    <fetchRequest name="ConversationByIdRequest" entity="ConversationEntity" predicateString="conversationID == $conversationID"/>
+    <fetchRequest name="ConversationOnline" entity="ConversationEntity" predicateString="isOnline == 1 AND messages != nil"/>
+    <fetchRequest name="MessagesByConversationId" entity="MessageEntity" predicateString="conversation.conversationID == $conversationID"/>
+    <fetchRequest name="UserByIdRequest" entity="User" predicateString="userID == $userID"/>
+    <fetchRequest name="UsersOnlineRequest" entity="User" predicateString="isOnline == 1"/>
     <elements>
         <element name="AppUser" positionX="-101" positionY="-132" width="128" height="73"/>
-        <element name="User" positionX="-290" positionY="-141" width="128" height="178"/>
-        <element name="MessageEntity" positionX="-488" positionY="-135" width="128" height="163"/>
         <element name="ConversationEntity" positionX="-594" positionY="180" width="128" height="148"/>
+        <element name="MessageEntity" positionX="-488" positionY="-135" width="128" height="163"/>
+        <element name="User" positionX="-290" positionY="-141" width="128" height="178"/>
     </elements>
 </model>
