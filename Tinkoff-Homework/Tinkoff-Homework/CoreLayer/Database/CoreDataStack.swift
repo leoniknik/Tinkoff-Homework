@@ -20,6 +20,7 @@ class CoreDataStack {
         get {
             let documentDirUrl: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             let url = documentDirUrl.appendingPathComponent("Store.sqlite")
+            print(url)
             return url
         }
     }
