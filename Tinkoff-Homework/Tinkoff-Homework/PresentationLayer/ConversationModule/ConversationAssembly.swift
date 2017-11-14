@@ -18,11 +18,11 @@ class ConversationAssembly {
         self.dataStorage = dataStorage
     }
     
-    func conversationViewController(conversationID: String) -> ConversationViewController {
+    func conversationViewController(conversationID: String, online: Bool) -> ConversationViewController {
         
         let conversationManager = ConversationManager(communicator: communicationManager.communicator, storage: dataStorage, conversationID: conversationID)
         
-        let model = ConversationModel(communicationManager: communicationManager, conversationManager: conversationManager, conversationID: conversationID)
+        let model = ConversationModel(communicationManager: communicationManager, conversationManager: conversationManager, conversationID: conversationID, online: online)
         communicationManager.conversationDelegate = model
         
         let controller = ConversationViewController(model: model)

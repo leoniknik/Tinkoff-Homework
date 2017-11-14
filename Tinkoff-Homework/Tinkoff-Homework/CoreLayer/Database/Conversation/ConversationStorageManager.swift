@@ -8,22 +8,20 @@
 
 import UIKit
 
-protocol ConversationMessageManagerDelegate: class {
-    func updateConversation(message: Message)
-}
-
-protocol ConversationStorageManagerDelegate: class {
-//    func conversationChanged(conversation: ConversationElement)
-//    func newConversationCreated(conversation: ConversationElement)
-    func update()
-}
+//protocol ConversationMessageManagerDelegate: class {
+//    func updateConversation(message: Message)
+//}
+//
+//protocol ConversationStorageManagerDelegate: class {
+////    func update()
+//}
 
 protocol IConversationStorageManager {
     
     var coreDataStack: CoreDataStack {get set}
     
-    weak var delegate: ConversationStorageManagerDelegate?  { get set }
-    weak var conversationDelegate: ConversationMessageManagerDelegate?  { get set }
+//    weak var delegate: ConversationStorageManagerDelegate?  { get set }
+//    weak var conversationDelegate: ConversationMessageManagerDelegate?  { get set }
     func saveConversation(userID: String, userName: String?)
     func deleteConversation(userID: String)
     func setMessageAsRead(conversationID: String)
@@ -55,7 +53,7 @@ class ConversationStorageManager: IConversationStorageManager {
     
     
     
-    var conversationDelegate: ConversationMessageManagerDelegate?
+//    var conversationDelegate: ConversationMessageManagerDelegate?
     
     func getConversationsList() -> [ConversationElement] {
         return converationList
@@ -69,7 +67,7 @@ class ConversationStorageManager: IConversationStorageManager {
 //        }
     }
     
-    weak var delegate: ConversationStorageManagerDelegate?
+//    weak var delegate: ConversationStorageManagerDelegate?
     //    weak var conversation: ConversationMessageStorageManagerDelegate?
     
     private var converationList: [ConversationElement] = []
@@ -122,9 +120,9 @@ class ConversationStorageManager: IConversationStorageManager {
         
         coreDataStack.performSave(context: context, completionHandler: nil)
         
-        DispatchQueue.main.async {
-            self.delegate?.update()
-        }
+//        DispatchQueue.main.async {
+//            self.delegate?.update()
+//        }
     }
     
     func setMessageAsRead(conversationID: String) {
@@ -216,18 +214,4 @@ class ConversationStorageManager: IConversationStorageManager {
         coreDataStack.performSave(context: context, completionHandler: nil)
 //        delegate?.update()
     }
-//
-
-
-//
-//    private func save(message: MessageElement, userID: String) {
-//        if let ind = converationList.index(where: {$0.userID == userID}) {
-//            converationList[ind].addMessage(message: message)
-//
-//            delegate?.conversationChanged(conversation: converationList[ind])
-//            conversation?.updateConversation(withMessage: message)
-//        } else {
-//            print("get unknown message!!!!!!")
-//        }
-//    }
 }

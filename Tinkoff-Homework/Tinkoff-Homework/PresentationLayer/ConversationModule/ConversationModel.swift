@@ -14,24 +14,36 @@ struct MessageDisplay {
 }
 
 protocol IConversationModelDelegate: class {
-    func userWentOffline()
-    func setup(dataSource: [Message])
+    func userDidBecomeOffline()
+    func userDidBecomeOnline()
 }
 
 protocol IConversationModel{
     var conversationManager: IConversationManager { get set }
     weak var delegate: IConversationModelDelegate? { get set }
     var userName: String { get set }
+    var online: Bool { get set }
     func numberOfRowsIn(section: Int) -> Int
     func getConversation(indexPath: IndexPath) -> MessageDisplay //!!!
     func sendMessage(text: String)
-    func markAsRead()
-    func checkIfConversationExist()
+    func setMessagesRead()
     
     func initFetchedResultsManagerFor(tableView: UITableView)
 }
 
 class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
+    
+    var online: Bool
+    
+    func userDidBecome(userID: String, online: Bool) {
+        if conversationID == userID {
+            if online {
+                delegate?.userDidBecomeOnline()
+            } else {
+                delegate?.userDidBecomeOffline()
+            }
+        }
+    }
     
     var conversationManager: IConversationManager
     var communicationManager: ICommunicationManager
@@ -39,25 +51,13 @@ class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
     private var conversationID: String
     var userName: String
     
-    init(communicationManager: ICommunicationManager, conversationManager: IConversationManager, conversationID: String) {
+    init(communicationManager: ICommunicationManager, conversationManager: IConversationManager, conversationID: String, online: Bool) {
         self.communicationManager = communicationManager
         self.conversationManager = conversationManager
         
         self.conversationID = conversationID
         self.userName = conversationManager.getUserName(userID: self.conversationID)
-        
-//        for message in self.conversationService.getUserConversation(withID: self.conversationID) {
-//            let newMessage = MessageCellDisplayModel(text: message.text, inbox: message.incoming)
-//            self.messages.append(newMessage)
-//        }
-    }
-    
-    func didLostUser(withID userID: String) {
-        
-    }
-    
-    func didReceive(message: Message) {
-        
+        self.online = online
     }
     
     func numberOfRowsIn(section: Int) -> Int {
@@ -83,14 +83,9 @@ class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
         conversationManager.sendMessage(string: text, to: conversationID, completionHandler: nil)
     }
     
-    func markAsRead() {
+    func setMessagesRead() {
         communicationManager.markConversationAsRead(userID: conversationID)
     }
-    
-    func checkIfConversationExist() {
-        
-    }
-    
     
     func initFetchedResultsManagerFor(tableView: UITableView) {
         conversationManager.setupDataProvider(tableView: tableView, conversationID: conversationID)

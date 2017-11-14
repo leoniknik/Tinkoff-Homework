@@ -10,14 +10,6 @@ import UIKit
 
 class ConversationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, IConversationModelDelegate {
     
-    func userWentOffline() {
-        
-    }
-    
-    func setup(dataSource: [Message]) {
-        
-    }
-    
     var model: IConversationModel
     
     @IBOutlet weak var downConstraint: NSLayoutConstraint!
@@ -41,10 +33,17 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         setupTableView()
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillShow, object: nil, queue: nil, using: self.keyboardWillShow)
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: nil, using: self.keyboardWillHide)
+        if model.online {
+            userDidBecomeOnline()
+        }
+        else {
+            userDidBecomeOffline()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        model.setMessagesRead()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -106,8 +105,6 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         
     }
 
-    
-
     @IBAction func send(_ sender: Any) {
         if let message = messageText.text {
             if !message.isEmpty {
@@ -118,7 +115,25 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         messageText.resignFirstResponder()
     }
     
+    
+    func userDidBecomeOffline() {
+        DispatchQueue.main.async {
+            self.messageText.isEnabled = false
+            self.sendButton.isEnabled = false
+        }
+    }
+    
+    func userDidBecomeOnline() {
+        DispatchQueue.main.async {
+            self.messageText.isEnabled = true
+            self.sendButton.isEnabled = true
+        }
+    }
+    
 }
+
+
+
 
 
 

@@ -11,7 +11,7 @@ protocol ICommunicationManager { //!!!
     
 //    weak var listDelegate: ICommunicationManagerDelegate? {get set}
     weak var conversationDelegate: ICommunicationManagerDelegate? {get set}
-    func getConversations() -> [ConversationElement]
+//    func getConversations() -> [ConversationElement]
     var dataStorage: IConversationStorageManager {get set}
     var dataProvider: IConversationsListDataProvider? {get set}
     func setupDataProvider(tableView: UITableView)
@@ -20,21 +20,15 @@ protocol ICommunicationManager { //!!!
 }
 
 protocol ICommunicationManagerDelegate: class {
-    func didLostUser(withID userID: String)
-    func didReceive(message: Message)
+    func userDidBecome(userID: String, online: Bool)
 }
 
-class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, ConversationStorageManagerDelegate {
+//, ConversationStorageManagerDelegate
+class CommunicationManager: ICommunicationManager, ICommunicatorDelegate{
     
     
     func markConversationAsRead(userID: String) {
         dataStorage.markMessageAsRead(conversationID: userID)
-    }
-    
-    
-    func update() {
-//        listDelegate?.updateConversationsList()
-//        conversationDelegate?.updateCurrentConversation()
     }
     
     
@@ -44,7 +38,6 @@ class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, Conver
     
     var communicator: ICommunicator
 
-//    weak var listDelegate: ICommunicationManagerDelegate?
     weak var conversationDelegate: ICommunicationManagerDelegate?
     
     init(multipeerCommunicator: ICommunicator, conversationStorage: IConversationStorageManager) {
@@ -54,114 +47,31 @@ class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, Conver
     
     func setupDataProvider(tableView: UITableView) {
         self.dataProvider = ConversationsListDataProvider(tableView: tableView, coreDataStack: dataStorage.coreDataStack)
-        self.dataStorage.delegate = self
+//        self.dataStorage.delegate = self
     }
     
     func userDidBecome(userID: String, online: Bool) {
-//        if let ind = converationList.index(where: {$0.userId == userID }) {
-//            converationList[ind].online = online
-//        
-//            converationList = converationList.sorted {
-//                if let date0 = $0.lastMessageDate,
-//                    let date1 = $1.lastMessageDate{
-//                    return date0 > date1
-//                } else {
-//                    return $0.name < $1.name
-//                }
-//            }
-//            
-//            DispatchQueue.main.async {
-//                self.listDelegate?.updateConversationsList()
-//                self.conversationDelegate?.updateCurrentConversation()
-//            }
-//        
-//        }
+        conversationDelegate?.userDidBecome(userID: userID, online: online)
     }
     
-    var converationList: [ConversationElement] = []
-    
-    func getConversations() -> [ConversationElement] {
-        return converationList
-    }
-    
-//    func getConversationBy(userID: String) -> ConversationElement? {
-//        if let ind = converationList.index(where: {$0.userId == userID }) {
-//            return converationList[ind]
-//        } else {
-//            return nil
-//        }
+//    var converationList: [ConversationElement] = []
+//
+//    func getConversations() -> [ConversationElement] {
+//        return converationList
 //    }
+//
     
     func send(_ message: Message, userID: String) {
-        
-//        guard let conversation = getConversationBy(userID: userID) else {
-//            return
-//        }
-    
-//        communicator.sendMessage(string: message.text, to: con) { (success, error) in
-//            guard error == nil else {
-//                return
-//            }
-//
-//            if success {
-////                conversation.addMessage(message: message)
-//                self.conversationDelegate?.updateConversationsList()
-//                self.conversationDelegate?.updateCurrentConversation()
-//            }
-//            else {
-//                print("Can't send message to peer")
-//            }
-//        }
     }
     
     ///
     func didFoundUser(userID: String, userName: String?) {
         dataStorage.saveConversation(userID: userID, userName: userName)
-//        if let ind = converationList.index(where: {$0.userId == userID }) {
-//            converationList[ind].online = true
-//        }
-//        else {
-//            if let newConversation = ConversationElement.init(withUser: userID, userName: userName) {
-//                converationList.append(newConversation)
-//            }
-//        }
-//
-//        converationList = converationList.sorted {
-//            if let date0 = $0.lastMessageDate,
-//                let date1 = $1.lastMessageDate{
-//                return date0 > date1
-//            } else {
-//                return $0.name < $1.name
-//            }
-//        }
-//
-//        DispatchQueue.main.async {
-//            self.listDelegate?.updateConversationsList()
-//                self.conversationDelegate?.updateCurrentConversation()
-//        }
     }
     
     ///
     func didLostUser(userID: String) {
         dataStorage.deleteConversation(userID: userID)
-//        if let ind = converationList.index(where: {$0.userId == userID }) {
-//            converationList[ind].online = false
-//        }
-//
-//        converationList = converationList.sorted {
-//            if let date0 = $0.lastMessageDate,
-//                let date1 = $1.lastMessageDate{
-//                return date0 > date1
-//            } else {
-//                return $0.name < $1.name
-//            }
-//        }
-//
-//        DispatchQueue.main.async {
-//            self.listDelegate?.updateConversationsList()
-//            self.conversationDelegate?.updateCurrentConversation()
-//        }
-        
     }
     ///
     func failedToStartBrowsingForUsers(error: Error) {
@@ -182,40 +92,7 @@ class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, Conver
         else {
             dataStorage.saveMessageToMe(userID: fromUser, text: text)
         }
-//
-//        if let ind = converationList.index(where: {$0.userId == rawFrom }) {
-//            if let newMessage = Message.init(withText: text, user: rawFrom) {
-//            newMessage.isIncoming = status
-//            converationList[ind].addMessage(message: newMessage)
-////            if fromUser == currentConversationId {
-////                converationList[ind].hasUnreadMessages = false
-////            }
-//            }
-//        }
-//
-//        DispatchQueue.main.async {
-//            self.listDelegate?.updateConversationsList()
-//            //if (fromUser == self.currentConversationId){
-//                self.conversationDelegate?.updateCurrentConversation()
-//            //}
-//        }
 
-    }
-    
-//    func getConversation(key: Int) -> ConversationElement {
-//        return self.converationList[key]
-//    }
-    
-    func updateConversation(message: Message) {
-        
-    }
-    
-    func conversationChanged(conversation: ConversationElement) {
-        
-    }
-    
-    func newConversationCreated(conversation: ConversationElement) {
-        
     }
     
 }

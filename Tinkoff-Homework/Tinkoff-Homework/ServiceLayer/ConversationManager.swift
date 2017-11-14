@@ -13,7 +13,7 @@ protocol IConversationManager: class {
     weak var delegate: IConversationManagerDelegate? { set get }
     var dataProvider: ConversationDataProvider? {get set}
     func getUserName(userID: String) -> String
-    func getUserConversation(withID userID: String) -> [Message]
+//    func getUserConversation(withID userID: String) -> [Message]
     func sendMessage(string text: String, to userID: String, completionHandler: ((_ success: Bool, _ error: Error?) -> ())?)
     func setupDataProvider(tableView: UITableView, conversationID: String)
 }
@@ -22,7 +22,8 @@ protocol IConversationManagerDelegate: class {
     func updateMessages(message: Message)
 }
 
-class ConversationManager: IConversationManager, ConversationMessageManagerDelegate {
+//ConversationMessageManagerDelegate
+class ConversationManager: IConversationManager {
     ///aaa
     var communicator: ICommunicator
     var dataStorage: IConversationStorageManager
@@ -32,16 +33,16 @@ class ConversationManager: IConversationManager, ConversationMessageManagerDeleg
     init(communicator: ICommunicator, storage: IConversationStorageManager, conversationID: String) {
         self.communicator = communicator
         self.dataStorage = storage
-        self.dataStorage.conversationDelegate = self
+//        self.dataStorage.conversationDelegate = self
     }
     
     func getUserName(userID: String) -> String {
         return dataStorage.getUserName(userID: userID)
     }
     
-    func getUserConversation(withID userID: String) -> [Message] {
-        return dataStorage.getConversation(userID: userID)
-    }
+//    func getUserConversation(withID userID: String) -> Con {
+//        return dataStorage.getConversation(userID: userID)
+//    }
     
     func sendMessage(string text: String, to userID: String, completionHandler: ((Bool, Error?) -> ())?) {
 //        dataStorage.saveMessageFromMe(userID: userID, text: text)
@@ -55,6 +56,6 @@ class ConversationManager: IConversationManager, ConversationMessageManagerDeleg
     //
     func setupDataProvider(tableView: UITableView, conversationID: String) {
         self.dataProvider = ConversationDataProvider(tableView: tableView, coreDataStack: dataStorage.coreDataStack, conversationID: conversationID)
-        self.dataStorage.conversationDelegate = self
+//        self.dataStorage.conversationDelegate = self
     }
 }

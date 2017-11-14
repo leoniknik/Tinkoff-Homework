@@ -128,10 +128,10 @@ class ConversationsListModel: IConversationsListModel {
 //
 //    }
     
-    func getConversations() {
-        let conversations = communicationManager.getConversations()
-        setupConversations(conversations)
-    }
+//    func getConversations() {
+//        let conversations = communicationManager.getConversations()
+//        setupConversations(conversations)
+//    }
     
     
     // MARK: HM 8

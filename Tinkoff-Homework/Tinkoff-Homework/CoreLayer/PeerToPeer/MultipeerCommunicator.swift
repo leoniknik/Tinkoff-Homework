@@ -152,14 +152,14 @@ extension MultipeerCommunicator: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state{
         case .connected:
-            delegate?.userDidBecome(userID: peerID.displayName, online: true)
+//            delegate?.userDidBecome(userID: peerID.displayName, online: true)
             break
             
         case .connecting:
             break
             
         case .notConnected:
-            delegate?.userDidBecome(userID: peerID.displayName, online: false)
+//            delegate?.userDidBecome(userID: peerID.displayName, online: false)
             break
         }
         
@@ -185,6 +185,7 @@ extension MultipeerCommunicator: MCNearbyServiceBrowserDelegate  {
         
         sessions[peerID.displayName] = nil
         delegate?.didLostUser(userID: peerID.displayName)
+        delegate?.userDidBecome(userID: peerID.displayName, online: false)
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
@@ -197,6 +198,7 @@ extension MultipeerCommunicator: MCNearbyServiceBrowserDelegate  {
             browser.invitePeer(peerID, to: session, withContext: nil, timeout: 30)
             let userName = info?["userName"] ?? "Noname"
             delegate?.didFoundUser(userID: peerID.displayName, userName: userName)
+            delegate?.userDidBecome(userID: peerID.displayName, online: true)
         }
 //        delegate?.didFoundUser(userID: peerID.displayName, userName: userName)
     }

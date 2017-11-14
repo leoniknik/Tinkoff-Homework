@@ -106,7 +106,7 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         if let index = tableView.indexPathForSelectedRow {
             if let conversation = model.getConversation(indexPath: index),
                 let id = conversation.id {
-                let controller = rootAssembly.conversationAssembly.conversationViewController(conversationID: id)
+                let controller = rootAssembly.conversationAssembly.conversationViewController(conversationID: id, online: conversation.online )
                 navigationController?.pushViewController(controller, animated: true)
             }
         }
