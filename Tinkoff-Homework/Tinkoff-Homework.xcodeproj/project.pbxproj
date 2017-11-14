@@ -128,8 +128,6 @@
 				CA37046B1FA8BEB200B5B6C1 /* CommunicationManager.swift */,
 				CAA730581FA8A98B000F7C1C /* ProfileService.swift */,
 				CAF7FAAE1FBA4B3800BFFCC6 /* ConversationManager.swift */,
-				CAF7FAB01FBA4FD200BFFCC6 /* ConversationDataProvider.swift */,
-				CA46EFB01FB8FAA000963A72 /* ConversationsListDataProvider.swift */,
 			);
 			path = ServiceLayer;
 			sourceTree = "<group>";
@@ -215,6 +213,8 @@
 		CA66ADA51FAF1998000BB8E7 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				CAF7FAB01FBA4FD200BFFCC6 /* ConversationDataProvider.swift */,
+				CA46EFB01FB8FAA000963A72 /* ConversationsListDataProvider.swift */,
 				CA46EFB41FB9982F00963A72 /* Profile */,
 				CA46EFB51FB9985600963A72 /* Entity */,
 				CA46EFB61FB9986500963A72 /* Conversation */,
