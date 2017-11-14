@@ -9,6 +9,29 @@
 import Foundation
 import MultipeerConnectivity
 
+protocol ICommunicator {
+    func sendMessage(string: String, to userID: String, completionHandler: ((_ sucsess: Bool, _ error: Error?) -> ())?)
+    weak var delegate : ICommunicatorDelegate? {get set}
+    var online: Bool {get set}
+}
+
+protocol ICommunicatorDelegate : class {
+    
+    var communicator: ICommunicator {get set} //!!!
+    
+    func didFoundUser(userID: String, userName: String?)
+    func didLostUser(userID: String)
+    func userDidBecome(userID: String, online:Bool)
+    
+    func failedToStartBrowsingForUsers(error: Error)
+    func failedToStartAdvertising(error: Error)
+    
+    func didReceiveMessage(text: String, fromUser: String, toUser: String)
+    
+//    func getConversation(key: Int) -> ConversationElement
+    
+}
+
 class MultipeerCommunicator:NSObject, ICommunicator {
     
     private var sessions = [ String : MCSession ]()
@@ -18,10 +41,10 @@ class MultipeerCommunicator:NSObject, ICommunicator {
     private var advertiser: MCNearbyServiceAdvertiser!
     
     private let serviceType = "tinkoff-chat"
-    private let discoveryInfo = ["userName" : "volodin"]
+    private let discoveryInfo = ["userName" : "komp"]
     private let messageEvent = "TextMessage"
     
-    weak var delegate: CommunicatorDelegate?
+    weak var delegate: ICommunicatorDelegate?
     var online: Bool = true
     
     override init() {
@@ -75,9 +98,7 @@ class MultipeerCommunicator:NSObject, ICommunicator {
             }
         }
         
-        
-        //
-        delegate?.didReceiveMessage(text: string, fromUser: "volodin", toUser: userID)
+        delegate?.didReceiveMessage(text: string, fromUser: UIDevice.current.identifierForVendor?.uuidString ?? "volodin", toUser: userID) //!!!
     }
     
     func createMessage(withText text: String) -> Data? {
@@ -99,8 +120,6 @@ class MultipeerCommunicator:NSObject, ICommunicator {
             return nil
         }
     }
-    
-    // MARK: generate ID
     
     func generateMessageId() -> String? {
         let string = "\(arc4random_uniform(UINT32_MAX))+\(Date.timeIntervalSinceReferenceDate)+\(arc4random_uniform(UINT32_MAX))".data(using: .utf8)?.base64EncodedString()
@@ -133,14 +152,14 @@ extension MultipeerCommunicator: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state{
         case .connected:
-            delegate?.userDidBecome(userID: peerID.displayName, online: true)
+//            delegate?.userDidBecome(userID: peerID.displayName, online: true)
             break
             
         case .connecting:
             break
             
         case .notConnected:
-            delegate?.userDidBecome(userID: peerID.displayName, online: false)
+//            delegate?.userDidBecome(userID: peerID.displayName, online: false)
             break
         }
         
@@ -166,6 +185,7 @@ extension MultipeerCommunicator: MCNearbyServiceBrowserDelegate  {
         
         sessions[peerID.displayName] = nil
         delegate?.didLostUser(userID: peerID.displayName)
+        delegate?.userDidBecome(userID: peerID.displayName, online: false)
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
@@ -178,6 +198,7 @@ extension MultipeerCommunicator: MCNearbyServiceBrowserDelegate  {
             browser.invitePeer(peerID, to: session, withContext: nil, timeout: 30)
             let userName = info?["userName"] ?? "Noname"
             delegate?.didFoundUser(userID: peerID.displayName, userName: userName)
+            delegate?.userDidBecome(userID: peerID.displayName, online: true)
         }
 //        delegate?.didFoundUser(userID: peerID.displayName, userName: userName)
     }
@@ -201,16 +222,12 @@ extension MultipeerCommunicator: MCNearbyServiceAdvertiserDelegate {
         
         let session = createSession(forUser: peerID.displayName)
         
-//        if let session = sessions[peerID.displayName] {
         
             if !session.connectedPeers.contains(peerID) {
                 invitationHandler(true, session)
             } else {
                 invitationHandler(false, nil)
             }
-//        } else {
-//            invitationHandler(false, nil)
-//        }
         
     }
 }

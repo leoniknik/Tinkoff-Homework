@@ -6,16 +6,36 @@
 //  Copyright © 2017 Кирилл Володин. All rights reserved.
 //
 
-let rootAssembly = RootAssembly()
-
-class RootAssembly{
+class RootAssembly {
     
-    let communicationManager: CommunicationManager
+    private let communicationManager: ICommunicationManager
+    private let conversationStorage: ConversationStorageManager
     
     init() {
         let multipeerCommunicator = MultipeerCommunicator()
-        self.communicationManager = CommunicationManager(multipeerCommunicator:multipeerCommunicator)
-        multipeerCommunicator.delegate = self.communicationManager
+        conversationStorage = ConversationStorageManager(coreDataStack: coreDataStack)
+        let manager = CommunicationManager(multipeerCommunicator: multipeerCommunicator, conversationStorage: conversationStorage )
+        communicationManager = manager
+        multipeerCommunicator.delegate = manager
     }
+    
+    lazy var conversationsListAssembly: ConversationsListAssembly = {
+        let conversationsListAssembly = ConversationsListAssembly(rootAssembly: self, manager: communicationManager)
+        return conversationsListAssembly
+    }()
+    
+    lazy var conversationAssembly: ConversationAssembly = {
+        let conversationAssembly = ConversationAssembly(manager: communicationManager, dataStorage: conversationStorage)
+        return conversationAssembly
+    }()
+    
+    lazy var profileAssembly: ProfileAssembly = {
+        return ProfileAssembly(coreDataStack: coreDataStack)
+    }()
+    
+    var coreDataStack: CoreDataStack = {
+        return CoreDataStack()
+    }()
+
     
 }

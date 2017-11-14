@@ -16,7 +16,7 @@ class Message {
     
     private let messageEvent = "TextMessage"
     
-    init?(withText text: String, user: String){
+    init(withText text: String, user: String){
         self.text = text
         self.date = Date()
         self.user = user

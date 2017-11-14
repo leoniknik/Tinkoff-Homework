@@ -10,6 +10,12 @@ import Foundation
 
 class ProfileAssembly {
     
+    private var coreDataStack: CoreDataStack
+    
+    init(coreDataStack: CoreDataStack) {
+        self.coreDataStack = coreDataStack
+    }
+    
     func profileViewController() -> ProfileViewController {
         var profileService = self.profileService()
         let model = ProfileModel(profileService: profileService)

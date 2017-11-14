@@ -7,17 +7,17 @@
 //
 
 import UIKit
-
-class ConversationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CommunicationManagerDelegate, IConversationsListModelDelegate {
+//, IConversationsListModelDelegate
+class ConversationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
-    
+    var rootAssembly: RootAssembly
     var model : IConversationsListModel
     
-    
-    init(model: IConversationsListModel) {
+    init(rootAssembly: RootAssembly, model: IConversationsListModel) {
         self.model = model
+        self.rootAssembly = rootAssembly
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -25,16 +25,15 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         return nil
     }
     
-    
-    var conversationOnlineList = [ConversationElement]()
-    var conversationOfflineList = [ConversationElement]()
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         setupNavigationItem()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     func setupNavigationItem() {
@@ -47,75 +46,55 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         }
         
     }
-
-    @objc func goToProfile() {
-        let assembly = ProfileAssembly()
-        let controller = assembly.profileViewController()
-        self.present(controller, animated: true, completion: nil)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        setupUI()
-        tableView.reloadData()
-    }
     
     func setupTableView() {
+        model.initFetchedResultsManagerFor(tableView: tableView)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "ConversationCell", bundle: nil), forCellReuseIdentifier: "ConversationCell")
     }
-    
-    func updateCurrentConversation() {
-        print()
+
+    @objc func goToProfile() {
+        let assembly = rootAssembly.profileAssembly
+        let controller = assembly.profileViewController()
+        self.present(controller, animated: true, completion: nil)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return model.numberOfSection()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return conversationOnlineList.count
-        }
-        else {
-            return conversationOfflineList.count
-        }
+        print(model.numberOfRowsIn(section: section))
+        return model.numberOfRowsIn(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ConversationCell") as! ConversationCellConfiguration
-        let conversation: ConversationElement
-        if indexPath.section == 0 {
-            conversation = conversationOnlineList[indexPath.row]
-        }
-        else {
-            conversation = conversationOfflineList[indexPath.row]
-        }
         
-        if let message = conversation.messages.last {
-            cell.message = message.text
+        if let conversation = model.getConversation(indexPath: indexPath) {
+
+        if let message = conversation.message {
+            cell.message = message
         } else {
             cell.message = "No messages yet"
         }
         
         cell.name = conversation.name
         cell.date = conversation.lastMessageDate
+        print(conversation.online)
         cell.online = conversation.online
         cell.hasUnreadMessages = conversation.hasUnreadMessages
+            
+        }
         
         return cell as! UITableViewCell
         
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Online"
-        }
-        else {
-            return "History"
-        }
+        return model.getNameForSection(section: section)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -125,59 +104,19 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
         if let index = tableView.indexPathForSelectedRow {
-            let conversation = model.communicationManager.converationList[index.row]
-            conversation.hasUnreadMessages = false
-            let controller = ConversationAsembler.createConversationsViewController(userName: conversation.name, userID: conversation.userId, key: index.row)
-            self.navigationController?.pushViewController(controller, animated: true)
+            if let conversation = model.getConversation(indexPath: index),
+                let id = conversation.id {
+                let controller = rootAssembly.conversationAssembly.conversationViewController(conversationID: id, online: conversation.online )
+                navigationController?.pushViewController(controller, animated: true)
+            }
         }
         
         tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    func updateConversationsList() {
-        model.getConversations()
-        tableView.reloadData()
-    }
-    
-    func setupDialogs(allConversatios allDialogs: [ConversationElement]){
-        
-        conversationOnlineList.removeAll()
-        conversationOfflineList.removeAll()
-        
-        var onWith = [ConversationElement]()
-        var onWithout = [ConversationElement]()
-        var offWith = [ConversationElement]()
-        var offWithout = [ConversationElement]()
-        
-        for dialog in allDialogs{
-            if(dialog.online){
-                if(dialog.messages.count>0){
-                    onWith.append(dialog)
-                }else{
-                    onWithout.append(dialog)
-                }
-            }else{
-                if(dialog.messages.count>0){
-                    offWith.append(dialog)
-                }else{
-                    offWithout.append(dialog)
-                }
-            }
-        }
-        
-        onWith.sort{$0.messages.last?.date ?? Date() < $1.messages.last?.date ?? Date()}
-        offWith.sort{$0.messages.last?.date ?? Date() < $1.messages.last?.date ?? Date()}
-        
-        onWithout.sort{$0.name<$1.name}
-        offWithout.sort{$0.name<$1.name}
-        
-        self.conversationOnlineList = onWith
-        self.conversationOnlineList.append(contentsOf: onWithout)
-        
-        self.conversationOfflineList = offWith
-        self.conversationOfflineList.append(contentsOf: offWithout)
-        
-    }
+//    func updateConversationsList() {
+//
+//    }
     
     
 }
