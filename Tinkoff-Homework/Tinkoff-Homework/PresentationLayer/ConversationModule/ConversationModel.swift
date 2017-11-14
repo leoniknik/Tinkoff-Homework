@@ -52,9 +52,6 @@ class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
 //        }
     }
     
-    
-    
-    
     func didLostUser(withID userID: String) {
         
     }
@@ -83,11 +80,11 @@ class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
     }
     
     func sendMessage(text: String) {
-        
+        conversationManager.sendMessage(string: text, to: conversationID, completionHandler: nil)
     }
     
     func markAsRead() {
-        
+        communicationManager.markConversationAsRead(userID: conversationID)
     }
     
     func checkIfConversationExist() {
@@ -98,7 +95,6 @@ class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
     func initFetchedResultsManagerFor(tableView: UITableView) {
         conversationManager.setupDataProvider(tableView: tableView, conversationID: conversationID)
     }
-    
     
     
 }

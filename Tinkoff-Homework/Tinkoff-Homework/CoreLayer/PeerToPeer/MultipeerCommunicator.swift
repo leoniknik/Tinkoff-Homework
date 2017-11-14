@@ -220,16 +220,12 @@ extension MultipeerCommunicator: MCNearbyServiceAdvertiserDelegate {
         
         let session = createSession(forUser: peerID.displayName)
         
-//        if let session = sessions[peerID.displayName] {
         
             if !session.connectedPeers.contains(peerID) {
                 invitationHandler(true, session)
             } else {
                 invitationHandler(false, nil)
             }
-//        } else {
-//            invitationHandler(false, nil)
-//        }
         
     }
 }

@@ -31,11 +31,28 @@ protocol IConversationStorageManager {
     func getUserName(userID: String) -> String
     func saveMessageFromMe(userID: String, text: String)
     func getConversationsList() -> [ConversationElement]
-    
+    func markMessageAsRead(conversationID: String)
     func getConversation(userID: String) -> [Message]
 }
 
 class ConversationStorageManager: IConversationStorageManager {
+    
+    
+    func markMessageAsRead(conversationID: String) {
+        guard let context = coreDataStack.mainContext else {
+            assert(false, "Can't get context in \(#function)")
+        }
+        
+        guard let conversation = ConversationEntity.findOrInsertConversation(with: conversationID, in: context) else {
+            return
+        }
+        
+        conversation.hasUnreadMessages = false
+        
+        coreDataStack.performSave(context: context, completionHandler: nil)
+        
+    }
+    
     
     
     var conversationDelegate: ConversationMessageManagerDelegate?
@@ -86,9 +103,6 @@ class ConversationStorageManager: IConversationStorageManager {
         user.conversation?.isOnline = true // test
         
         coreDataStack.performSave(context: context, completionHandler: nil)
-        DispatchQueue.main.async {
-            self.delegate?.update()
-        }
     }
     
     func deleteConversation(userID: String) {

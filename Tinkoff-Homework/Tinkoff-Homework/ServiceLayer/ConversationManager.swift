@@ -44,7 +44,7 @@ class ConversationManager: IConversationManager, ConversationMessageManagerDeleg
     }
     
     func sendMessage(string text: String, to userID: String, completionHandler: ((Bool, Error?) -> ())?) {
-        dataStorage.saveMessageFromMe(userID: userID, text: text)
+//        dataStorage.saveMessageFromMe(userID: userID, text: text)
         communicator.sendMessage(string: text, to: userID, completionHandler: completionHandler)
     }
     

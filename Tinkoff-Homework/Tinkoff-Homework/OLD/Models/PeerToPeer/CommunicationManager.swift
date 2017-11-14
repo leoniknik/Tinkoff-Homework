@@ -16,6 +16,7 @@ protocol ICommunicationManager { //!!!
     var dataProvider: IConversationsListDataProvider? {get set}
     func setupDataProvider(tableView: UITableView)
     var communicator: ICommunicator {get set}
+    func markConversationAsRead(userID: String)
 }
 
 protocol ICommunicationManagerDelegate: class {
@@ -24,6 +25,12 @@ protocol ICommunicationManagerDelegate: class {
 }
 
 class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, ConversationStorageManagerDelegate {
+    
+    
+    func markConversationAsRead(userID: String) {
+        dataStorage.markMessageAsRead(conversationID: userID)
+    }
+    
     
     func update() {
 //        listDelegate?.updateConversationsList()
@@ -169,7 +176,7 @@ class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, Conver
     func didReceiveMessage(text: String, fromUser: String, toUser: String) {
         
 
-        if fromUser == "volodin" {
+        if fromUser == UIDevice.current.identifierForVendor?.uuidString ?? "volodin" {
             dataStorage.saveMessageFromMe(userID: toUser, text: text)
         }
         else {
