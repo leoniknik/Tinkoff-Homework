@@ -13,10 +13,6 @@ protocol IConversationsListDataProvider {
     var fetchedResultsController: NSFetchedResultsController<ConversationEntity>? { get set }
 }
 
-protocol IConversationsListDataProviderDelegate {
-
-}
-
 class ConversationsListDataProvider: NSObject, IConversationsListDataProvider {
     var fetchedResultsController: NSFetchedResultsController<ConversationEntity>?
     let tableView: UITableView
@@ -30,7 +26,11 @@ class ConversationsListDataProvider: NSObject, IConversationsListDataProvider {
         super.init()
         
         if let context = coreDataStack.mainContext {
-            let fetchRequestsFactory = FetchRequestsFactory()
+            
+            guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
+                return
+            }
+            let fetchRequestsFactory = FetchRequestsFactory(model: model)
             let fetchRequest = fetchRequestsFactory.fetchRequestAllConversations()
         
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(ConversationEntity.lastMessage.date), ascending: false)]

@@ -6,67 +6,99 @@
 //  Copyright © 2017 Кирилл Володин. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+struct MessageDisplay {
+    var text: String
+    var isIncoming: Bool
+}
 
 protocol IConversationModelDelegate: class {
-    func setupDialog(dialog:ConversationElement)
+    func userWentOffline()
+    func setup(dataSource: [Message])
 }
 
 protocol IConversationModel{
-    var communicationManager: ICommunicationManager {get set}
-
-    weak var delegate: IConversationModelDelegate? {get set}
+    var conversationManager: IConversationManager { get set }
+    weak var delegate: IConversationModelDelegate? { get set }
+    var userName: String { get set }
+    func numberOfRowsIn(section: Int) -> Int
+    func getConversation(indexPath: IndexPath) -> MessageDisplay //!!!
+    func sendMessage(text: String)
+    func markAsRead()
+    func checkIfConversationExist()
     
-    func getDialog()
-    func updateUnread()
-    func sendMessage(string: String, to: String)
+    func initFetchedResultsManagerFor(tableView: UITableView)
 }
 
 class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
     
-    func updateConversationsList() {
-        
-    }
-    
-    func updateCurrentConversation() {
-        
-    }
-    
-    
+    var conversationManager: IConversationManager
     var communicationManager: ICommunicationManager
-//    var userName:String
-//    var userID:String
     weak var delegate: IConversationModelDelegate?
-//    var key: Int
+    private var conversationID: String
+    var userName: String
     
-    init(communicationManager: ICommunicationManager) {
+    init(communicationManager: ICommunicationManager, conversationManager: IConversationManager, conversationID: String) {
         self.communicationManager = communicationManager
-    }
-
-    
-//    init(userName:String,userID:String, key: Int, communicationManager: ICommunicationManager) {
-//        self.userID=userID
-//        self.userName=userName
-//        self.communicationManager = communicationManager
-//        self.key = key
-//    }
-    
-    func getDialog(){
-//        let item = communicationManager.getConversation(key: key)
-//        delegate?.setupDialog(dialog: item)
-    }
-    
-    func updateUnread(){
-//        let item = communicationManager.getConversation(key: key)
-//        item.hasUnreadMessages = false
-    }
-    
-    func sendMessage(string: String, to: String){
-//        communicationManager.multipeerCommunicator.sendMessage(string: string, to: to, completionHandler: nil) не
+        self.conversationManager = conversationManager
         
+        self.conversationID = conversationID
+        self.userName = conversationManager.getUserName(userID: self.conversationID)
         
-//        communicationManager.communicator.sendMessage(string: string, to: to, completionHandler: nil)
+//        for message in self.conversationService.getUserConversation(withID: self.conversationID) {
+//            let newMessage = MessageCellDisplayModel(text: message.text, inbox: message.incoming)
+//            self.messages.append(newMessage)
+//        }
     }
+    
+    
+    
+    
+    func didLostUser(withID userID: String) {
+        
+    }
+    
+    func didReceive(message: Message) {
+        
+    }
+    
+    func numberOfRowsIn(section: Int) -> Int {
+        guard let fetchedResultsController = conversationManager.dataProvider?.fetchedResultsController,
+            let sections = fetchedResultsController.sections else {
+                return 0
+        }
+        return sections[section].numberOfObjects
+    }
+    
+    func getConversation(indexPath: IndexPath) -> MessageDisplay {
+        if let message = conversationManager.dataProvider?.fetchedResultsController?.object(at: indexPath) {
+            
+            let messageDisplayModel = MessageDisplay(text: message.text ?? "", isIncoming: message.sender?.currentAppUser == nil)
+            
+            return messageDisplayModel
+        }
+        
+        return MessageDisplay(text: "", isIncoming: false)
+    }
+    
+    func sendMessage(text: String) {
+        
+    }
+    
+    func markAsRead() {
+        
+    }
+    
+    func checkIfConversationExist() {
+        
+    }
+    
+    
+    func initFetchedResultsManagerFor(tableView: UITableView) {
+        conversationManager.setupDataProvider(tableView: tableView, conversationID: conversationID)
+    }
+    
     
     
 }

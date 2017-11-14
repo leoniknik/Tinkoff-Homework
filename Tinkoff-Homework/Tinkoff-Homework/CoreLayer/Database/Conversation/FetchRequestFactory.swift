@@ -13,12 +13,11 @@ struct FetchRequestsFactory {
     
     let conversationEntityName = "ConversationEntity"
     
-//    let model: NSManagedObjectModel?
-//    
-//    init(model: NSManagedObjectModel?) {
-//        self.model = model
-//    }
-//    
+    let model: NSManagedObjectModel
+    
+    init(model: NSManagedObjectModel) {
+        self.model = model
+    }
 
     func fetchRequestOnlineConversations() -> NSFetchRequest<ConversationEntity> {
         let fetchRequest = NSFetchRequest<ConversationEntity>(entityName: conversationEntityName)
@@ -28,6 +27,11 @@ struct FetchRequestsFactory {
     
     func fetchRequestAllConversations() -> NSFetchRequest<ConversationEntity> {
         let fetchRequest = NSFetchRequest<ConversationEntity>(entityName: conversationEntityName)
+        return fetchRequest
+    }
+    
+    func fetchRequestMessagesWithConversationID(id: String) -> NSFetchRequest<MessageEntity>? {
+        let fetchRequest = MessageEntity.fetchRequestMessagesInConversation(id: id, withModel: model)
         return fetchRequest
     }
     

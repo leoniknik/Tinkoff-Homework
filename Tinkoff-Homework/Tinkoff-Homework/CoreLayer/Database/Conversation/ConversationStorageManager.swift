@@ -8,11 +8,13 @@
 
 import UIKit
 
-protocol ConversationStorageManagerDelegate: class {
-    func conversationChanged(conversation: ConversationElement)
-    func newConversationCreated(conversation: ConversationElement)
+protocol ConversationMessageManagerDelegate: class {
     func updateConversation(message: Message)
-    
+}
+
+protocol ConversationStorageManagerDelegate: class {
+//    func conversationChanged(conversation: ConversationElement)
+//    func newConversationCreated(conversation: ConversationElement)
     func update()
 }
 
@@ -20,24 +22,34 @@ protocol IConversationStorageManager {
     
     var coreDataStack: CoreDataStack {get set}
     
-    
-    
     weak var delegate: ConversationStorageManagerDelegate?  { get set }
-//    weak var conversation: ConversationMessageStorageManagerDelegate?  { get set }
+    weak var conversationDelegate: ConversationMessageManagerDelegate?  { get set }
     func saveConversation(userID: String, userName: String?)
     func deleteConversation(userID: String)
     func setMessageAsRead(conversationID: String)
     func saveMessageToMe(userID: String, text: String)
     func getUserName(userID: String) -> String
     func saveMessageFromMe(userID: String, text: String)
-    func setAllUsersOffline(completionHandler: @escaping () -> () )
     func getConversationsList() -> [ConversationElement]
+    
+    func getConversation(userID: String) -> [Message]
 }
 
 class ConversationStorageManager: IConversationStorageManager {
     
+    
+    var conversationDelegate: ConversationMessageManagerDelegate?
+    
     func getConversationsList() -> [ConversationElement] {
         return converationList
+    }
+    
+    func getConversation(userID: String) -> [Message] {
+//        if let ind = converationList.index(where: {$0. == userID }) {
+//            return converationList[ind].messages
+//        } else {
+            return [Message]()
+//        }
     }
     
     weak var delegate: ConversationStorageManagerDelegate?
@@ -116,34 +128,7 @@ class ConversationStorageManager: IConversationStorageManager {
     func saveMessageToMe(userID: String, text: String) {
         saveMessage(messageText: text, fromUser: userID, toUser: self.getAppUserID())
     }
-    
-    func setAllUsersOffline(completionHandler: @escaping () -> ()) {
-        
-//        guard let context = coreDataStack.saveContext else {
-//            assert(false, "Can't get context in \(#function)")
-//        }
-//
-//        guard let appUser = AppUser.findOrInsertAppUser(in: context),
-//            let appUserID = appUser.currentUser?.userID else {
-//                completionHandler()
-//                return
-//        }
-//
-//        if let allUsers = User.allUsers(inContext: context) {
-//            for user in allUsers {
-//                guard user.userID != appUserID else { continue }
-//                user.isOnline = false
-//            }
-//        }
-//
-//        stack.save(context: context, completionHandler: { success in
-//            guard success else {
-//                assertionFailure()
-//                return
-//            }
-//            completionHandler()
-//        })
-    }
+
     
     func getUserName(userID: String) -> String {
         

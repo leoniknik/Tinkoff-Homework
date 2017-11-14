@@ -17,7 +17,7 @@ class ConversationElement  {
     var hasUnreadMessages : Bool = false //
     var message: String? //
     
-//    var messages: [Message] = []
+    var messages: [Message] = []
     
     init(id: String?, userName: String?, online: Bool, lastMessageDate: Date?, hasUnreadMessages: Bool, message: String?){
         self.id = id

@@ -7,8 +7,8 @@
 //
 
 import UIKit
-
-class ConversationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, IConversationsListModelDelegate {
+//, IConversationsListModelDelegate
+class ConversationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -106,17 +106,17 @@ class ConversationsListViewController: UIViewController, UITableViewDelegate, UI
         if let index = tableView.indexPathForSelectedRow {
             if let conversation = model.getConversation(indexPath: index),
                 let id = conversation.id {
-//               rootAssembly.conversationModule.setup(inViewController: conversationVC, communicationService: communicationService, conversationID: id)
-                rootAssembly
+                let controller = rootAssembly.conversationAssembly.conversationViewController(conversationID: id)
+                navigationController?.pushViewController(controller, animated: true)
             }
         }
         
         tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    func updateConversationsList() {
-
-    }
+//    func updateConversationsList() {
+//
+//    }
     
     
 }

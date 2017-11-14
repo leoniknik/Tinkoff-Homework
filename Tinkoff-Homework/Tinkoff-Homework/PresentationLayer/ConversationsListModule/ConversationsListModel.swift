@@ -10,7 +10,7 @@ import UIKit
 
 protocol IConversationsListModel {
     
-    weak var delegate : IConversationsListModelDelegate? {get set}
+//    weak var delegate : IConversationsListModelDelegate? {get set}
     var conversationOnlineList: [ConversationElement] {get set}
     var conversationOfflineList: [ConversationElement] {get set}
     func initFetchedResultsManagerFor(tableView: UITableView)
@@ -21,11 +21,11 @@ protocol IConversationsListModel {
     func getConversation(indexPath: IndexPath) -> ConversationElement?
 }
 
-protocol IConversationsListModelDelegate : class {
-    func updateConversationsList()
-}
+//protocol IConversationsListModelDelegate : class {
+//    func updateConversationsList()
+//}
 
-class ConversationsListModel: IConversationsListModel, ICommunicationManagerDelegate {
+class ConversationsListModel: IConversationsListModel {
     
     func getNameForSection(section: Int) -> String {
         
@@ -74,7 +74,7 @@ class ConversationsListModel: IConversationsListModel, ICommunicationManagerDele
     var conversationOfflineList = [ConversationElement]()
     
     var communicationManager : ICommunicationManager
-    weak var delegate : IConversationsListModelDelegate?
+//    weak var delegate : IConversationsListModelDelegate?
     
     init(communicationManager: ICommunicationManager) {
         self.communicationManager = communicationManager
@@ -120,13 +120,13 @@ class ConversationsListModel: IConversationsListModel, ICommunicationManagerDele
         
     }
     
-    func updateConversationsList() {
-        delegate?.updateConversationsList()
-    }
-    
-    func updateCurrentConversation() {
-        
-    }
+//    func updateConversationsList() {
+//        delegate?.updateConversationsList()
+//    }
+//
+//    func updateCurrentConversation() {
+//
+//    }
     
     func getConversations() {
         let conversations = communicationManager.getConversations()

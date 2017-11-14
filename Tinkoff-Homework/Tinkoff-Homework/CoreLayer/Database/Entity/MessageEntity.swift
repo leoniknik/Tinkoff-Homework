@@ -12,7 +12,7 @@ import CoreData
 extension MessageEntity {
     
     static func fetchRequestMessagesInConversation(id: String, withModel model: NSManagedObjectModel) -> NSFetchRequest<MessageEntity>? {
-        let templateName = "MessagesInConversationID"
+        let templateName = "MessagesInConversationRequest"
         let conditions = [
             "conversationID" : id
         ]

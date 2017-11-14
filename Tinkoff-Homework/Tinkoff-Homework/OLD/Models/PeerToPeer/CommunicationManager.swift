@@ -9,24 +9,25 @@ import UIKit
 
 protocol ICommunicationManager { //!!!
     
-    weak var listDelegate: ICommunicationManagerDelegate? {get set}
+//    weak var listDelegate: ICommunicationManagerDelegate? {get set}
     weak var conversationDelegate: ICommunicationManagerDelegate? {get set}
     func getConversations() -> [ConversationElement]
-    
+    var dataStorage: IConversationStorageManager {get set}
     var dataProvider: IConversationsListDataProvider? {get set}
     func setupDataProvider(tableView: UITableView)
+    var communicator: ICommunicator {get set}
 }
 
 protocol ICommunicationManagerDelegate: class {
-    func updateConversationsList()
-    func updateCurrentConversation()
+    func didLostUser(withID userID: String)
+    func didReceive(message: Message)
 }
 
 class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, ConversationStorageManagerDelegate {
     
     func update() {
-        listDelegate?.updateConversationsList()
-        conversationDelegate?.updateCurrentConversation()
+//        listDelegate?.updateConversationsList()
+//        conversationDelegate?.updateCurrentConversation()
     }
     
     
@@ -36,7 +37,7 @@ class CommunicationManager: ICommunicationManager, ICommunicatorDelegate, Conver
     
     var communicator: ICommunicator
 
-    weak var listDelegate: ICommunicationManagerDelegate?
+//    weak var listDelegate: ICommunicationManagerDelegate?
     weak var conversationDelegate: ICommunicationManagerDelegate?
     
     init(multipeerCommunicator: ICommunicator, conversationStorage: IConversationStorageManager) {

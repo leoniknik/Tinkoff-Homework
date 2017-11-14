@@ -21,13 +21,15 @@ class ConversationsListAssembly {
     func conversationsListViewController() -> ConversationsListViewController {
         
         let model = ConversationsListModel(communicationManager: communicationManager)
-        communicationManager.listDelegate = model
+//        communicationManager.listDelegate = model
         
         let viewController = ConversationsListViewController(rootAssembly: rootAssembly, model: model)
         viewController.model = model
-        model.delegate = viewController
+//        model.delegate = viewController
         
         return viewController
     }
+    
+
     
 }

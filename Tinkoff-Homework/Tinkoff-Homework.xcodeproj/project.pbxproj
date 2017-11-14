@@ -48,6 +48,8 @@
 		CAAE9B811F9CFD9E00FCFC39 /* MultipeerCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAAE9B801F9CFD9E00FCFC39 /* MultipeerCommunicator.swift */; };
 		CAD777FD1FA88CB40081A510 /* ConversationsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD777FC1FA88CB40081A510 /* ConversationsListModel.swift */; };
 		CAD777FF1FA88CD50081A510 /* ConversationsListAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD777FE1FA88CD50081A510 /* ConversationsListAssembly.swift */; };
+		CAF7FAAF1FBA4B3800BFFCC6 /* ConversationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF7FAAE1FBA4B3800BFFCC6 /* ConversationManager.swift */; };
+		CAF7FAB11FBA4FD200BFFCC6 /* ConversationDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF7FAB01FBA4FD200BFFCC6 /* ConversationDataProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +96,8 @@
 		CAAE9B801F9CFD9E00FCFC39 /* MultipeerCommunicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerCommunicator.swift; sourceTree = "<group>"; };
 		CAD777FC1FA88CB40081A510 /* ConversationsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListModel.swift; sourceTree = "<group>"; };
 		CAD777FE1FA88CD50081A510 /* ConversationsListAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListAssembly.swift; sourceTree = "<group>"; };
+		CAF7FAAE1FBA4B3800BFFCC6 /* ConversationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationManager.swift; sourceTree = "<group>"; };
+		CAF7FAB01FBA4FD200BFFCC6 /* ConversationDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDataProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +127,9 @@
 			children = (
 				CA37046B1FA8BEB200B5B6C1 /* CommunicationManager.swift */,
 				CAA730581FA8A98B000F7C1C /* ProfileService.swift */,
+				CAF7FAAE1FBA4B3800BFFCC6 /* ConversationManager.swift */,
+				CAF7FAB01FBA4FD200BFFCC6 /* ConversationDataProvider.swift */,
+				CA46EFB01FB8FAA000963A72 /* ConversationsListDataProvider.swift */,
 			);
 			path = ServiceLayer;
 			sourceTree = "<group>";
@@ -199,9 +206,8 @@
 		CA46EFB61FB9986500963A72 /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				CA46EFB21FB8FBF200963A72 /* FetchRequestFactory.swift */,
-				CA46EFB01FB8FAA000963A72 /* ConversationsListDataProvider.swift */,
 				CA46EFBF1FB99D1C00963A72 /* ConversationStorageManager.swift */,
+				CA46EFB21FB8FBF200963A72 /* FetchRequestFactory.swift */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -363,6 +369,7 @@
 			files = (
 				CAA7305A1FA8A98C000F7C1C /* ProfileService.swift in Sources */,
 				CA66ADB11FAF69A1000BB8E7 /* Profile.swift in Sources */,
+				CAF7FAAF1FBA4B3800BFFCC6 /* ConversationManager.swift in Sources */,
 				CA66ADAF1FAF474D000BB8E7 /* StorageManager.swift in Sources */,
 				CAA730701FA8AF81000F7C1C /* ConversationViewController.swift in Sources */,
 				CA2F2D151FA881F90024A717 /* ConversationCell.swift in Sources */,
@@ -392,6 +399,7 @@
 				CAA730611FA8AB34000F7C1C /* GCD.swift in Sources */,
 				CAA730551FA8A84C000F7C1C /* ProfileModel.swift in Sources */,
 				CA3858A41FA88FB900DC6A6F /* RootAssembly.swift in Sources */,
+				CAF7FAB11FBA4FD200BFFCC6 /* ConversationDataProvider.swift in Sources */,
 				CA46EFBC1FB9996400963A72 /* ConversationEntity.swift in Sources */,
 				CAA730721FA8AF81000F7C1C /* MessageCell.swift in Sources */,
 			);
