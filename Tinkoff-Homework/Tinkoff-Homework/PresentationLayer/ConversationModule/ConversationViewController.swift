@@ -70,8 +70,8 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     
     func setupTableView() {
         model.initFetchedResultsManagerFor(tableView: table)
-        self.table.register(UINib.init(nibName: "IncomeMessageCell", bundle: nil), forCellReuseIdentifier: "IncomeMessageCell")
-        self.table.register(UINib.init(nibName: "OutcomeMessageCell", bundle: nil), forCellReuseIdentifier: "OutcomeMessageCell")
+        self.table.register(UINib(nibName: "IncomeMessageCell", bundle: nil), forCellReuseIdentifier: "IncomeMessageCell")
+        self.table.register(UINib(nibName: "OutcomeMessageCell", bundle: nil), forCellReuseIdentifier: "OutcomeMessageCell")
         self.table.delegate = self
         self.table.dataSource = self
         table.separatorStyle = .none

@@ -104,14 +104,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBAction func getProfileImage(_ sender: Any) {
         let optionMenu = UIAlertController(title: nil, message: "Выбери источник картинки", preferredStyle: .actionSheet)
         
-        let deleteAction = UIAlertAction(title: "Камера", style: .default, handler: {
+        let cameraAction = UIAlertAction(title: "Камера", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             self.openCamera()
         })
         
-        let saveAction = UIAlertAction(title: "Галерея", style: .default, handler: {
+        let galleryAction = UIAlertAction(title: "Галерея", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             self.openGallary()
+        })
+        
+        let apiAction = UIAlertAction(title: "Загрузить", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.openAPILoader()
         })
         
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: {
@@ -119,8 +124,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             print("Cancelled")
         })
         
-        optionMenu.addAction(deleteAction)
-        optionMenu.addAction(saveAction)
+        optionMenu.addAction(cameraAction)
+        optionMenu.addAction(galleryAction)
+        optionMenu.addAction(apiAction)
         optionMenu.addAction(cancelAction)
         
         self.present(optionMenu, animated: true, completion: nil)
@@ -133,6 +139,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         present(picker, animated: true, completion: nil)
     }
     
+    func openAPILoader() {
+        let assembly = ChooseImageAssembly()
+        let viewcontroller = assembly.chooseImageViewController()
+        self.present(viewcontroller, animated: true, completion: nil)
+    }
     
     func openCamera()
     {
