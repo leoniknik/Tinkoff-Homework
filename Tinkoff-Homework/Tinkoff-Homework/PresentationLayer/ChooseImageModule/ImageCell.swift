@@ -8,18 +8,8 @@
 
 import UIKit
 
-protocol ImageCellConfiguration: class {
-    var image: UIImage? {get set}
-}
-
-class ImageCell: UICollectionViewCell, ImageCellConfiguration {
+class ImageCell: UICollectionViewCell {
     
-    var image: UIImage? {
-        didSet (value) {
-            imageView.image = value
-        }
-    }
-
     @IBOutlet weak var imageView: UIImageView!
     
     override func awakeFromNib() {

@@ -15,7 +15,7 @@ class ChooseImageAssembly {
         
         let imageService = ImageService(requestSender: requestSender)
         let model = ChooseImageModel(imageService: imageService)
-        imageService.delegate = model
+//        imageService.delegate = model
         
         let viewcontroller = ChooseImageViewController(model: model)
         model.delegate = viewcontroller

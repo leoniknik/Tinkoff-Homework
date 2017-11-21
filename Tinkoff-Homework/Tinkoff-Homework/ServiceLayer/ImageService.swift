@@ -10,12 +10,12 @@ import UIKit
 
 protocol IImageServiceProtocol {
     weak var delegate: IImageServiceDelegate? {get set}
-    func getImagesListFor(portion: Int)
-    func getImage(forUrl url: String, completion: @escaping (UIImage?) -> ())
+    func getImagesListFor(portion: Int, completion: @escaping ([ListOfImagesModel]) -> ())
+    func getImage(forUrl url: String, completion: @escaping (ImageModel?) -> ())
 }
 
 protocol IImageServiceDelegate: class {
-    func updateUrlsList(urls: [String])
+    func updateUrlsList(urls: [ListOfImagesModel])
 }
 
 class ImageService: IImageServiceProtocol {
@@ -28,11 +28,20 @@ class ImageService: IImageServiceProtocol {
         self.requestSender = requestSender
     }
     
-    func getImage(forUrl url: String, completion: @escaping (UIImage?) -> ()) {
+    func getImage(forUrl url: String, completion: @escaping (ImageModel?) -> ()) {
+        let requestConfig = RequestsConfigFactory.imageConfig(url: url)
         
+        requestSender.send(config: requestConfig) { (result) in
+            self.defaultOnResult(result: result, completion: completion)
+        }
     }
     
-    func getImagesListFor(portion: Int) {
+    func getImagesListFor(portion: Int, completion: @escaping ([ListOfImagesModel]) -> ()) {
+        let requestConfig = RequestsConfigFactory.flowersImagesListConfig(page: portion)
+        
+        requestSender.send(config: requestConfig, completionHandler: { (result) in
+            self.defaultOnResult(result: result, completion: completion)
+        })
         
     }
     

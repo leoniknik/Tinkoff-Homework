@@ -54,23 +54,24 @@ class ChooseImageViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return model.getNumberOfItems()
+        let number = model.getNumberOfItems()
+        return number
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as? ImageCellConfiguration {
-            cell.image = UIImage(named: "placeholder-user") ?? UIImage()
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as? ImageCell {
+            cell.imageView.image = UIImage(named: "placeholder-user") ?? UIImage()
             
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 self?.model.getImage(forItem: indexPath.item, completion: { (image) in
-                    DispatchQueue.main.async { [weak cell] in
-                        cell?.image = image
+                    DispatchQueue.main.async {
+                        cell.imageView.image = image
                     }
                 })
             }
             
-            return cell as? UICollectionViewCell ?? UICollectionViewCell()
+            return cell
         }
         
         return UICollectionViewCell()

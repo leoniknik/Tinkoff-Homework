@@ -8,8 +8,12 @@
 
 import UIKit
 
-struct RequestsFactory {
-    static func flowersImagesList(page: Int) -> RequestConfig<[UIImage]> { //!!!!
-        return RequestConfig<[ImageListModel]>(request: CosmosImageListRequest(pageNumber: page), parser: ImageListParser())
+struct RequestsConfigFactory {
+    static func flowersImagesListConfig(page: Int) -> RequestConfig<[ListOfImagesModel]> {
+        return RequestConfig<[ListOfImagesModel]>(request: FlowersImageListRequest(page: page), parser: ListOfImagesParser())
+    }
+    
+    static func imageConfig(url: String) -> RequestConfig<ImageModel> {
+        return RequestConfig<ImageModel>(request: ImageRequest(url: url), parser: ImageParser())
     }
 }

@@ -21,12 +21,12 @@ protocol IChooseImageModelDelegate: class {
     func update()
 }
 
-class ChooseImageModel: IChooseImageModel, IImageServiceDelegate {
+class ChooseImageModel: IChooseImageModel {
     
     weak var delegate: IChooseImageModelDelegate?
     
     var service: IImageServiceProtocol
-    var urls = [String]()
+    var urls = [ListOfImagesModel]()
     let portion: Int = 50
     
     init(imageService: IImageServiceProtocol) {
@@ -34,25 +34,28 @@ class ChooseImageModel: IChooseImageModel, IImageServiceDelegate {
     }
     
     func getImages() {
-        service.getImagesListFor(portion: getNextPortion())
+        service.getImagesListFor(portion: getNextPortion(), completion: {[weak self] (urls) in
+            self?.urls.append(contentsOf: urls)
+            self?.delegate?.update()
+        })
     }
     
     func getNextPortion() -> Int {
         return urls.count / portion + 1
     }
 
-    func updateUrlsList(urls: [String]) {
-        self.urls.append(contentsOf: urls)
-    }
+//    func updateUrlsList(urls: [String]) {
+//        self.urls.append(contentsOf: urls)
+//    }
     
     func getImage(forItem item: Int, completion: @escaping (UIImage) -> ()) {
-        let url = urls[item]
+        let url = urls[item].url
         service.getImage(forUrl: url, completion: { (image) in
             guard let image = image else {
                 completion(UIImage(named: "placeholder-user") ?? UIImage())
                 return
             }
-            completion(image)
+            completion(image.image)
         })
     }
     

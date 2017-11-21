@@ -7,3 +7,25 @@
 //
 
 import Foundation
+
+class ImageRequest: IRequest {
+    
+    private var url: String
+    
+    // MARK: - IRequest
+    
+    var urlRequest: URLRequest? {
+        if let url = URL(string: url) {
+            return URLRequest(url: url)
+        }
+        
+        return nil
+    }
+    
+    // MARK: - Initialization
+    
+    init(url: String) {
+        self.url = url
+    }
+    
+}
