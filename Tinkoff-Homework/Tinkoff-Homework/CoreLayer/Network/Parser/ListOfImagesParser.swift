@@ -6,10 +6,11 @@
 //  Copyright © 2017 Кирилл Володин. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct ListOfImagesModel {
     let url: String
+    var image: UIImage?
 }
 
 class ListOfImagesParser: Parser<[ListOfImagesModel]> {
@@ -30,7 +31,7 @@ class ListOfImagesParser: Parser<[ListOfImagesModel]> {
             for hit in hits {
                 if let url = hit["webformatURL"] as? String {
                     print(url)
-                    urls.append(ListOfImagesModel(url: url))
+                    urls.append(ListOfImagesModel(url: url, image: nil))
                 }
             }
             

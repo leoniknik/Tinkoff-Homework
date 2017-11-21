@@ -11,7 +11,7 @@ import UIKit
 protocol IChooseImageModel {
     
     weak var delegate: IChooseImageModelDelegate? {get set}
-    
+    var urls: [ListOfImagesModel] {get set}
     func getImages()
     func getImage(forItem: Int, completion: @escaping (UIImage) -> ())
     func getNumberOfItems() -> Int
@@ -40,6 +40,7 @@ class ChooseImageModel: IChooseImageModel {
         })
     }
     
+    // pagination
     func getNextPortion() -> Int {
         return urls.count / portion + 1
     }

@@ -15,7 +15,7 @@ class ListOfImagesRequest: IRequest {
     }
     
     private var limitString: String {
-        return "&per_page=\(limit)/"
+        return "&per_page=\(limit)"
     }
     
     private var secretKeyString: String {
@@ -31,16 +31,17 @@ class ListOfImagesRequest: IRequest {
     // MARK: - IRequest
     var urlRequest: URLRequest? {
         
-        var pageParam: String
+//        var pageParam: String
         
-        if page < 2 {
-            pageParam = ""
-        }
-        else {
-            pageParam = "&page=\(page)"
-        }
+//        if page < 2 {
+//            pageParam = ""
+//        }
+//        else {
+//            pageParam = "&page=\(page)"
+//        }
         
-        let urlString: String = baseUrl + secretKeyString + command + limitString + pageParam
+//        let urlString: String = baseUrl + secretKeyString + command + limitString + pageParam
+        let urlString: String = baseUrl + secretKeyString + command + limitString
         
         if let url = URL(string: urlString) {
             return URLRequest(url: url)

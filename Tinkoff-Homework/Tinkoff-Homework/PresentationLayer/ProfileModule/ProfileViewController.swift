@@ -141,7 +141,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func openAPILoader() {
         let assembly = ChooseImageAssembly()
-        let viewcontroller = assembly.chooseImageViewController()
+        let viewcontroller = assembly.chooseImageViewController(presenter: self)
         self.present(viewcontroller, animated: true, completion: nil)
     }
     
@@ -187,14 +187,10 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         if(model.profile.needSave){
             saveButton.isEnabled = true
             saveButton.backgroundColor = .green
-//            operationButton.isEnabled = true
-//            operationButton.backgroundColor = .green
         }
         else{
             saveButton.isEnabled = false
             saveButton.backgroundColor = .red
-//            operationButton.isEnabled = false
-//            operationButton.backgroundColor = .red
         }
     }
     
@@ -285,6 +281,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     func update(){
         self.activityStopAnimate()
         showProfile()
+    }
+    
+    func setupAvatar(image: UIImage) {
+        photoImageView.image = image
+        model.profile.newAvatar = image
+        setSaveButtonsAvalibleState()
     }
     
 }

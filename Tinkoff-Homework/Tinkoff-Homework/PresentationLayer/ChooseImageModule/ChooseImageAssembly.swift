@@ -10,14 +10,14 @@ import Foundation
 
 class ChooseImageAssembly {
     
-    func chooseImageViewController() -> ChooseImageViewController {
+    func chooseImageViewController(presenter: ProfileViewController) -> ChooseImageViewController {
         let requestSender = RequestSender()
         
         let imageService = ImageService(requestSender: requestSender)
         let model = ChooseImageModel(imageService: imageService)
 //        imageService.delegate = model
         
-        let viewcontroller = ChooseImageViewController(model: model)
+        let viewcontroller = ChooseImageViewController(model: model, presenter: presenter)
         model.delegate = viewcontroller
         return viewcontroller
     }

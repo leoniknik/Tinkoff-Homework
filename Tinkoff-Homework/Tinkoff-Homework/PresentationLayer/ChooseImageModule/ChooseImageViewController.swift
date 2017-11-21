@@ -18,7 +18,10 @@ class ChooseImageViewController: UIViewController, UICollectionViewDelegate, UIC
     
     var model: IChooseImageModel
     
-    init(model: IChooseImageModel) {
+    var presenter: ProfileViewController
+    
+    init(model: IChooseImageModel, presenter: ProfileViewController) {
+        self.presenter = presenter
         self.model = model
         super.init(nibName: nil, bundle: nil)
     }
@@ -61,14 +64,21 @@ class ChooseImageViewController: UIViewController, UICollectionViewDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as? ImageCell {
-            cell.imageView.image = UIImage(named: "placeholder-user") ?? UIImage()
             
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.model.getImage(forItem: indexPath.item, completion: { (image) in
-                    DispatchQueue.main.async {
-                        cell.imageView.image = image
-                    }
-                })
+            if let image = model.urls[indexPath.item].image {
+                cell.imageView.image = image
+            }
+            else {
+                cell.imageView.image = UIImage(named: "placeholder-user") ?? UIImage()
+                
+                DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                    self?.model.getImage(forItem: indexPath.item, completion: { (image) in
+                        DispatchQueue.main.async {
+                            self?.model.urls[indexPath.item].image = image
+                            self?.collectionView.reloadItems(at: [indexPath])
+                        }
+                    })
+                }
             }
             
             return cell
@@ -78,7 +88,12 @@ class ChooseImageViewController: UIViewController, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? ImageCell else {return}
+        let image = cell.imageView.image ?? UIImage()
+        presenter.setupAvatar(image: image)
+        model.urls.removeAll()
+        collectionView.deselectItem(at: indexPath, animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func update() {
@@ -88,6 +103,12 @@ class ChooseImageViewController: UIViewController, UICollectionViewDelegate, UIC
         }
     }
     
+//    //пагинация
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if model.getNumberOfItems() - 10 == indexPath.item {
+//            model.getImages()
+//        }
+//    }
     
     
 }
