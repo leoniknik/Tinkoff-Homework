@@ -41,7 +41,7 @@ class MultipeerCommunicator:NSObject, ICommunicator {
     private var advertiser: MCNearbyServiceAdvertiser!
     
     private let serviceType = "tinkoff-chat"
-    private let discoveryInfo = ["userName" : "komp"]
+    private let discoveryInfo = ["userName" : "mac"]
     private let messageEvent = "TextMessage"
     
     weak var delegate: ICommunicatorDelegate?

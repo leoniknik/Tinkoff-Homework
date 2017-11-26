@@ -18,6 +18,8 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var messageText: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     
+    var titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 40))
+    
     init(model: IConversationModel) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
@@ -29,10 +31,19 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = model.userName
+        setupTitle()
         setupTableView()
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillShow, object: nil, queue: nil, using: self.keyboardWillShow)
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillHide, object: nil, queue: nil, using: self.keyboardWillHide)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        model.setMessagesRead()
         if model.online {
             userDidBecomeOnline()
         }
@@ -41,15 +52,16 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        model.setMessagesRead()
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
     
+    func setupTitle() {
+        titleLabel.text = model.userName
+        navigationItem.titleView = titleLabel
+        titleLabel.textAlignment = .center
+        titleLabel.adjustsFontSizeToFitWidth = true
+    }
     
     func keyboardWillShow(notification: Notification) -> Void {
         if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
@@ -117,23 +129,66 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     
     
     func userDidBecomeOffline() {
-        DispatchQueue.main.async {
-            self.messageText.isEnabled = false
-            self.sendButton.isEnabled = false
+        DispatchQueue.main.async { [weak self] in
+            self?.messageText.isEnabled = false
+            self?.sendButton.isEnabled = false
+            self?.titleLabel.setOnline(online: false)
         }
     }
     
     func userDidBecomeOnline() {
-        DispatchQueue.main.async {
-            self.messageText.isEnabled = true
-            self.sendButton.isEnabled = true
+        DispatchQueue.main.async { [weak self] in
+            self?.messageText.isEnabled = true
+            self?.sendButton.isEnabled = true
+            self?.titleLabel.setOnline(online: true)
         }
     }
     
 }
 
 
+extension UILabel {
+    
+    func setOnline(online: Bool) {
+        
+        let scale: CGFloat
+        let titleColor: UIColor
+        
+        if online {
+            scale = 1.1
+            titleColor = .green
+        }
+        else {
+            scale = 1.0
+            titleColor = .black
+        }
+        
+        UIView.transition(with: self, duration: 1.0, options: .transitionCrossDissolve, animations: {
+            self.textColor = titleColor
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 1.0) {
+            self.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }
+    }
+    
+}
 
+class SendButton: UIButton {
+    
+    override var isEnabled: Bool {
+        didSet {
+            let color : CGColor = isEnabled ? UIColor.green.cgColor :  UIColor.red.cgColor
+            layer.backgroundColor = color
+            let scale = CABasicAnimation(keyPath: "transform.scale")
+            scale.duration = 0.5
+            scale.fromValue = 1.0
+            scale.toValue = 1.15
+            scale.autoreverses = true
+            layer.add(scale, forKey: "sendButton")
+        }
+    }
+}
 
 
 

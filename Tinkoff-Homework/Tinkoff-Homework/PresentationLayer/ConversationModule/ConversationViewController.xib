@@ -56,7 +56,7 @@
                                                 <constraint firstItem="Gst-fR-Lxe" firstAttribute="leading" secondItem="97X-ZK-kHY" secondAttribute="leading" constant="8" id="yql-VY-p8n"/>
                                             </constraints>
                                         </view>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvg-gs-vZU">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nvg-gs-vZU" customClass="SendButton" customModule="Tinkoff_Homework" customModuleProvider="target">
                                             <rect key="frame" x="275" y="0.0" width="100" height="60"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
