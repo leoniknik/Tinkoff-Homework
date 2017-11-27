@@ -8,7 +8,7 @@
 
 import UIKit
 //, IConversationsListModelDelegate
-class ConversationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ConversationsListViewController: AnimationViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     

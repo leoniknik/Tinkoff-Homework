@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, IProfileModelDelegate {
+class ProfileViewController: AnimationViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, IProfileModelDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var downConstraint: NSLayoutConstraint!

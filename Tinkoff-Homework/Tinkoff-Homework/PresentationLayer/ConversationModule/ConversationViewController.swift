@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConversationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IConversationModelDelegate {
+class ConversationViewController: AnimationViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IConversationModelDelegate {
     
     var model: IConversationModel
     var textFieldHasMessage: Bool = false
@@ -148,9 +148,9 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let text = textField.text as NSString? {
-            let txtAfterUpdate = text.replacingCharacters(in: range, with: string)
+            let newText = text.replacingCharacters(in: range, with: string)
             
-            if txtAfterUpdate.isEmpty {
+            if newText.isEmpty {
                 textFieldHasMessage = false
             } else {
                 textFieldHasMessage = true
@@ -198,7 +198,6 @@ extension UILabel {
 }
 
 class SendButton: UIButton {
-    
     override var isEnabled: Bool {
         didSet {
             let color : CGColor = isEnabled ? UIColor.green.cgColor :  UIColor.red.cgColor

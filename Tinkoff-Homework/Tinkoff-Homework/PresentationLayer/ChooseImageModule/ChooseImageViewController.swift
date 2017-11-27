@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChooseImageViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, IChooseImageModelDelegate {
+class ChooseImageViewController: AnimationViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, IChooseImageModelDelegate {
 
     private let numberOfColomns: CGFloat = 3
     private let inset: CGFloat = 10.0

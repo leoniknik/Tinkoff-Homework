@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA170F421FCC09D00088AB18 /* AnimationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA170F411FCC09D00088AB18 /* AnimationViewController.swift */; };
 		CA2F2D111FA880150024A717 /* ConversationsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2F2D0F1FA880150024A717 /* ConversationsListViewController.swift */; };
 		CA2F2D121FA880150024A717 /* ConversationsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CA2F2D101FA880150024A717 /* ConversationsListViewController.xib */; };
 		CA2F2D151FA881F90024A717 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2F2D131FA881F90024A717 /* ConversationCell.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CA170F411FCC09D00088AB18 /* AnimationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationViewController.swift; sourceTree = "<group>"; };
 		CA2F2D0F1FA880150024A717 /* ConversationsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsListViewController.swift; sourceTree = "<group>"; };
 		CA2F2D101FA880150024A717 /* ConversationsListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationsListViewController.xib; sourceTree = "<group>"; };
 		CA2F2D131FA881F90024A717 /* ConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				CA2F2D0E1FA87FC10024A717 /* ProfileModule */,
 				CA2F2D0D1FA87FA40024A717 /* ConversationModule */,
 				CA2F2D0C1FA87F170024A717 /* ConversationsListModule */,
+				CA170F411FCC09D00088AB18 /* AnimationViewController.swift */,
 			);
 			path = PresentationLayer;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				CADA4C3E1FC339B70006B22E /* ChooseImageViewController.swift in Sources */,
 				CADA4C531FC38DD20006B22E /* ImageRequest.swift in Sources */,
 				CAD777FD1FA88CB40081A510 /* ConversationsListModel.swift in Sources */,
+				CA170F421FCC09D00088AB18 /* AnimationViewController.swift in Sources */,
 				CA66ADA71FAF19B5000BB8E7 /* CoreDataStack.swift in Sources */,
 				CAA730611FA8AB34000F7C1C /* GCD.swift in Sources */,
 				CADA4C451FC37A3F0006B22E /* ImageService.swift in Sources */,
