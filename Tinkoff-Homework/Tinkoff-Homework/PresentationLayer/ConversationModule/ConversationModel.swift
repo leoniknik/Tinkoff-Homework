@@ -36,6 +36,7 @@ class ConversationModel: IConversationModel, ICommunicationManagerDelegate {
     var online: Bool
     
     func userDidBecome(userID: String, online: Bool) {
+        self.online = online
         if conversationID == userID {
             if online {
                 delegate?.userDidBecomeOnline()

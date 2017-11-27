@@ -8,9 +8,10 @@
 
 import UIKit
 
-class ConversationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, IConversationModelDelegate {
+class ConversationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, IConversationModelDelegate {
     
     var model: IConversationModel
+    var textFieldHasMessage: Bool = false
     
     @IBOutlet weak var downConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -31,6 +32,7 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        messageText.delegate = self
         setupTitle()
         setupTableView()
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIKeyboardWillShow, object: nil, queue: nil, using: self.keyboardWillShow)
@@ -131,7 +133,7 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     func userDidBecomeOffline() {
         DispatchQueue.main.async { [weak self] in
             self?.messageText.isEnabled = false
-            self?.sendButton.isEnabled = false
+            self?.updateButtonState()
             self?.titleLabel.setOnline(online: false)
         }
     }
@@ -139,8 +141,29 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
     func userDidBecomeOnline() {
         DispatchQueue.main.async { [weak self] in
             self?.messageText.isEnabled = true
-            self?.sendButton.isEnabled = true
+            self?.updateButtonState()
             self?.titleLabel.setOnline(online: true)
+        }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text as NSString? {
+            let txtAfterUpdate = text.replacingCharacters(in: range, with: string)
+            
+            if txtAfterUpdate.isEmpty {
+                textFieldHasMessage = false
+            } else {
+                textFieldHasMessage = true
+            }
+            updateButtonState()
+        }
+        return true
+    }
+    
+    func updateButtonState() {
+        let buttonIsEnabled = model.online && textFieldHasMessage;
+        if buttonIsEnabled != sendButton.isEnabled {
+            sendButton.isEnabled = buttonIsEnabled
         }
     }
     
@@ -188,6 +211,7 @@ class SendButton: UIButton {
             layer.add(scale, forKey: "sendButton")
         }
     }
+    
 }
 
 
